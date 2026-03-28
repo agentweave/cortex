@@ -74,25 +74,19 @@ status: active
 ## Work Queue
 ```
 
-### 6. Ask for Telegram configuration (optional)
+### 6. Ask for Telegram chat ID (optional)
 
-Ask: "Would you like to set up Telegram so you can message the chief of staff from your phone? (Recommended, but you can also use terminal or remote control instead.)"
+Ask: "Would you like to connect Telegram so you can message the chief of staff from your phone? (Recommended, but you can also use terminal or remote control instead.)"
 
-If yes: ask if they already have a Telegram bot.
+If yes: ask for their Telegram chat ID. The bot token is managed separately by the Claude Code Telegram plugin (`/telegram:configure`) — Cortex only needs the chat ID to know where to send messages.
 
-If they have a bot: ask for the bot token and chat ID.
-
-If they need to create one: guide them:
-> "To create a Telegram bot:
-> 1. Open Telegram and message @BotFather
-> 2. Send /newbot and follow the prompts
-> 3. Copy the bot token (looks like `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11`)
-> 4. Start a chat with your new bot and send any message
-> 5. To get your chat ID, visit: `https://api.telegram.org/bot<TOKEN>/getUpdates`
+> "To find your chat ID:
+> 1. If you already have a Telegram bot configured with the Claude Code Telegram plugin, your chat ID is in the plugin's config.
+> 2. Otherwise, set up the Telegram plugin first with `/telegram:configure`, then come back to provide your chat ID.
 >
-> Paste your bot token and chat ID when ready."
+> Paste your chat ID when ready."
 
-If they want to skip Telegram: set both values to empty strings in config. The chief of staff will work fine via terminal or remote control — Telegram just adds mobile access.
+If they want to skip Telegram: set the value to an empty string in config. The chief of staff will work fine via terminal or remote control — Telegram just adds mobile access.
 
 ### 7. Ask for chief of staff project directory
 
@@ -120,7 +114,6 @@ team_dir: <team_dir>
 heartbeat_minutes: <heartbeat>
 daily_briefing: "<briefing_time>"
 daily_review: "<review_time>"
-telegram_bot_token: "<token>"
 telegram_chat_id: "<chat_id>"
 chief_of_staff_project: "<cos_project_dir>"
 ```

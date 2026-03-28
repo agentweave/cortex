@@ -57,9 +57,10 @@ team_dir: ~/cortex-team
 heartbeat_minutes: 15
 daily_briefing: "09:00"
 daily_review: "18:00"
-telegram_bot_token: "bot123456:ABC-DEF..."
 telegram_chat_id: "123456789"
 ```
+
+Telegram bot connection is handled by the Claude Code Telegram plugin. Cortex only stores the chat ID.
 
 Skills read this config at runtime. If config doesn't exist, skills tell the user to run `/setup-cortex`.
 

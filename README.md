@@ -23,15 +23,17 @@ From a local clone:
 
 ```bash
 claude plugins marketplace add /path/to/cortex --scope user
-claude plugins install cortex
+claude plugins install cortex@cortex-local
 ```
 
-From GitHub:
+From GitHub (repo not published yet — use local clone for now):
 
 ```bash
 claude plugins marketplace add https://github.com/kaichen/cortex --scope user
-claude plugins install cortex
+claude plugins install cortex@cortex-local
 ```
+
+The marketplace name (`cortex-local`) comes from `.claude-plugin/marketplace.json` in the repo. This file is required for the plugin system to discover and install the plugin.
 
 **2. Run setup**
 
@@ -43,7 +45,7 @@ In your terminal, start Claude Code and run:
 
 This creates your team directory, config, and chief of staff agent note. It will ask for:
 - Team directory path (default: `~/cortex-team`)
-- Telegram bot token and chat ID (optional, recommended)
+- Telegram chat ID (optional — for mobile access via the Telegram plugin)
 - Heartbeat interval and daily schedule times
 
 **3. Join as chief of staff**
@@ -66,6 +68,80 @@ Then in the worker's project directory:
 
 ```
 /join-cortex Billing Dev
+```
+
+## What You Get
+
+When an agent runs `/join-cortex`, two files are created in the project:
+
+**`TEAM.md`** — the full protocol that tells the agent how to operate:
+
+```markdown
+# Cortex Protocol
+
+You are **Billing Dev**, a member of Cortex — a coordinated team of AI agents.
+
+## Your Identity
+- Agent note: agents/billing-dev.md in the team directory
+- Project: ~/Projects/billing-service
+- Team directory: ~/cortex-team
+
+## Protocol
+### Checking for Work
+- Read your project's ## Work Queue
+- Pick up tasks with status "ready"
+- Mark "in-progress", do the work, mark "done"
+
+### Heartbeat
+- Poll every 15 minutes for new work
+...
+```
+
+**`CLAUDE.md`** — a one-line reference so the agent auto-syncs on session start:
+
+```markdown
+## Cortex
+On session start, run /join-cortex Billing Dev to sync with Cortex. See TEAM.md for full protocol.
+```
+
+## How Agents Communicate
+
+Agents never talk to each other directly. All coordination flows through the team directory — a shared folder of markdown files that acts as a message bus.
+
+- **Chief of staff writes tasks** to project notes' `## Work Queue` sections
+- **Workers poll** their project's work queue on a heartbeat, pick up `ready` tasks, and report `done`
+- **Status flows back** through agent notes' `## Session Log` — the chief of staff reads these to monitor progress
+
+This means agents don't need to run simultaneously. A worker can pick up tasks hours after the chief of staff wrote them.
+
+## Work Queue
+
+Tasks live in project notes under `## Work Queue`. The chief of staff writes them, workers execute them.
+
+**Status lifecycle:** `ready` → `in-progress` → `done`
+
+Example:
+
+```markdown
+## Work Queue
+
+### 2026-03-28T10:00
+**Task:** Add Stripe webhook endpoint for payment failures
+**Scope:** Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed events
+**Status:** ready
+```
+
+When a worker picks it up:
+
+```markdown
+**Status:** in-progress
+```
+
+When complete:
+
+```markdown
+**Status:** done
+Summary: Implemented POST /webhooks/stripe with signature verification. Handles payment_intent.payment_failed by updating subscription status to past_due. Added tests.
 ```
 
 ## Skills Reference
@@ -97,10 +173,11 @@ team_dir: ~/cortex-team
 heartbeat_minutes: 15
 daily_briefing: "09:00"
 daily_review: "18:00"
-telegram_bot_token: "your-bot-token"
 telegram_chat_id: "your-chat-id"
 chief_of_staff_project: "~/Projects/chief-of-staff"
 ```
+
+Telegram is handled by the separate [Claude Code Telegram plugin](https://docs.anthropic.com/en/docs/claude-code). Cortex only needs the `telegram_chat_id` to know where to send messages. If you skip Telegram, the chief of staff works fine via terminal or remote control.
 
 ## Team Directory Structure
 
@@ -127,6 +204,22 @@ Agent names are converted to slugs for file naming: lowercase, spaces replaced w
 | Billing Dev | billing-dev | `agents/billing-dev.md` |
 | Chief of Staff | chief-of-staff | `agents/chief-of-staff.md` |
 | Dashboard Dev | dashboard-dev | `agents/dashboard-dev.md` |
+
+## Plugin Structure
+
+```
+cortex/
+  .claude-plugin/
+    plugin.json          — plugin metadata
+    marketplace.json     — marketplace definition (required for installation)
+  skills/
+    setup-cortex/        — first-time setup
+    join-cortex/         — agent onboarding
+    leave-cortex/        — agent offboarding
+    register-agent/      — agent registration
+  README.md
+  LICENSE
+```
 
 ## License
 
