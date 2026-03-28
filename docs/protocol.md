@@ -168,7 +168,18 @@ The coordinator manages the team. Its protocol:
 5. **Register agents** — Create new agent notes from template
 6. **Daily briefing** — Scan all agents and projects, summarize status, send to user
 7. **Daily review** — Summarize what got done, what's blocked, what's next
-8. **Heartbeat** — Poll every N minutes. Update own `last-heartbeat`.
+8. **Housekeeping** (during daily review) — Delete `done` tasks older than 7 days from work queues. Trim agent session logs to only the latest entry. Commit cleanup to git.
+9. **Heartbeat** — Poll every N minutes. Update own `last-heartbeat`.
+
+## Housekeeping
+
+Notes grow over time as tasks complete and sessions accumulate. The coordinator prunes them during the daily review:
+
+- **Work queues** — Delete tasks with status `done` that are older than 7 days. Active tasks (`ready`, `in-progress`) are never deleted.
+- **Session logs** — Keep only the most recent entry in each agent note's `## Session Log`. Older entries are removed.
+- **Git** — The team directory should be a git repo. Pruned content is preserved in git history. After cleanup, commit: `git add -A && git commit -m "chore: prune completed tasks and old session logs"`
+
+This keeps note files focused on what's active and prevents unbounded growth.
 
 ## Communication Rules
 

@@ -121,6 +121,14 @@ Agents never talk to each other directly. All coordination flows through the tea
 
 This means agents don't need to run simultaneously. A worker can pick up tasks hours after the chief of staff wrote them.
 
+### Housekeeping
+
+The team directory should be a git repo. During the daily review, the chief of staff prunes old data:
+
+- **Done tasks** older than 7 days are deleted from work queues
+- **Session logs** are trimmed to only the latest entry per agent
+- **Git preserves history** — pruned content lives in `git log` if you ever need it
+
 ## Work Queue
 
 Tasks live in project notes under `## Work Queue`. The chief of staff writes them, workers execute them.
