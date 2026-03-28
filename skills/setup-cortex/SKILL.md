@@ -74,13 +74,15 @@ status: active
 ## Work Queue
 ```
 
-### 6. Ask for Telegram configuration
+### 6. Ask for Telegram configuration (optional)
 
-Ask: "Cortex uses Telegram for the chief of staff to communicate with you. Do you have a Telegram bot set up?"
+Ask: "Would you like to set up Telegram so you can message the chief of staff from your phone? (Recommended, but you can also use terminal or remote control instead.)"
 
-If yes: ask for the bot token and chat ID.
+If yes: ask if they already have a Telegram bot.
 
-If no: guide them:
+If they have a bot: ask for the bot token and chat ID.
+
+If they need to create one: guide them:
 > "To create a Telegram bot:
 > 1. Open Telegram and message @BotFather
 > 2. Send /newbot and follow the prompts
@@ -90,7 +92,7 @@ If no: guide them:
 >
 > Paste your bot token and chat ID when ready."
 
-If they want to skip Telegram for now, allow it — set both values to empty strings in config.
+If they want to skip Telegram: set both values to empty strings in config. The chief of staff will work fine via terminal or remote control — Telegram just adds mobile access.
 
 ### 7. Ask for chief of staff project directory
 
@@ -136,7 +138,7 @@ joined: <today's date YYYY-MM-DD>
 ---
 
 ## Role
-Coordinate the Cortex agent team — receive instructions via Telegram, dispatch work to agents, monitor progress, send daily briefings and reviews.
+Coordinate the Cortex agent team — receive instructions from the user, dispatch work to agents, monitor progress, send daily briefings and reviews.
 
 ## Projects
 (All projects — the chief of staff monitors every project in the team directory)
@@ -145,8 +147,8 @@ Coordinate the Cortex agent team — receive instructions via Telegram, dispatch
 - Agent registration and onboarding via /register-agent
 - Work dispatch — write tasks to project work queues
 - Agent monitoring — read session logs, detect staleness and blockers
-- Daily briefing (morning) and review (evening) via Telegram
-- Telegram communication with the user
+- Daily briefing (morning) and review (evening)
+- User communication via Telegram, terminal, or remote control
 
 ## Session Log
 Last session: --

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Cortex is a Claude Code plugin that lets users coordinate a team of AI agents through a shared folder of markdown files. A chief of staff agent receives instructions via Telegram, dispatches work to project-specific worker agents, and monitors progress — all through plain markdown with YAML frontmatter.
+Cortex is a Claude Code plugin that lets users coordinate a team of AI agents through a shared folder of markdown files. A chief of staff agent receives instructions from the user, dispatches work to project-specific worker agents, and monitors progress — all through plain markdown with YAML frontmatter. The user can talk to the chief of staff via Telegram (recommended), terminal, or remote control.
 
 No special tooling required. The shared folder can be an Obsidian vault, a git repo, or any directory of markdown files.
 
@@ -13,7 +13,7 @@ No special tooling required. The shared folder can be an Obsidian vault, a git r
 ```
 User
   |
-  +-- Telegram --> Chief of Staff (Claude Code session)
+  +-- Telegram/Terminal/Remote --> Chief of Staff (Claude Code session)
   |                  |
   |                  +-- Reads/writes team dir (agents/, projects/)
   |                  +-- Dispatches tasks -> project work queues
@@ -184,7 +184,7 @@ Interactive skill that:
 1. Asks for team directory path (default: `~/cortex-team`)
 2. Creates the directory structure (`agents/`, `projects/`, `templates/`)
 3. Writes `templates/agent-template.md`
-4. Asks for Telegram bot token and chat ID (for chief of staff communication). Guides user through creating a bot via @BotFather if they don't have one yet.
+4. Asks for Telegram bot token and chat ID (optional, recommended for mobile access). Guides user through creating a bot via @BotFather if they want to set it up.
 5. Asks for chief of staff project directory path
 6. Writes `~/.cortex/config.yaml` with all settings
 7. Creates `agents/chief-of-staff.md` with the coordinator role
@@ -232,7 +232,7 @@ The chief of staff is a Cortex agent with additional coordinator responsibilitie
 
 ### Core Duties
 
-- Receive instructions from the user (primarily via Telegram)
+- Receive instructions from the user (via Telegram if configured, or terminal/remote control)
 - Register new agents via `/register-agent`
 - Dispatch work by writing tasks to project work queues with status `ready`
 - Monitor agent status by reading `## Session Log` in agent notes
@@ -244,15 +244,15 @@ The chief of staff's heartbeat polls for:
 
 - Agent session logs that haven't updated (staleness detection)
 - Blocked agents (reads blockers from agent notes)
-- User messages via Telegram
+- User messages (via Telegram if configured)
 
 ### Daily Briefing (configurable, default 09:00)
 
-Scan all agents and projects, summarize status, flag anything needing attention, send via Telegram.
+Scan all agents and projects, summarize status, flag anything needing attention, send to user (via Telegram if configured, otherwise output in session).
 
 ### Daily Review (configurable, default 18:00)
 
-Summarize what got done today, what's blocked, what's coming tomorrow, send via Telegram.
+Summarize what got done today, what's blocked, what's coming tomorrow, send to user (via Telegram if configured, otherwise output in session).
 
 ### Project Directory
 

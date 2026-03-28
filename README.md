@@ -2,16 +2,16 @@
 
 Coordinate a team of AI agents through a shared folder of markdown files.
 
-Cortex is a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that sets up a **chief of staff** agent to manage **worker agents** across projects. The chief of staff receives instructions via Telegram, dispatches work to agents, and monitors progress — all through plain markdown files with YAML frontmatter.
+Cortex is a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that sets up a **chief of staff** agent to manage **worker agents** across projects. The chief of staff receives your instructions, dispatches work to agents, and monitors progress — all through plain markdown files with YAML frontmatter.
 
 ## How It Works
 
 ```
-You (Telegram) --> Chief of Staff (Claude Code) --> Team Directory (markdown files) <-- Worker Agents (Claude Code)
+You --> Chief of Staff (Claude Code) --> Team Directory (markdown files) <-- Worker Agents (Claude Code)
 ```
 
 - **Team directory** — a shared folder of markdown files. Agent notes, project notes, and work queues. Can be an Obsidian vault, a git repo, or any directory.
-- **Chief of staff** — a coordinator agent that receives your instructions via Telegram, dispatches tasks to workers, and sends daily briefings.
+- **Chief of staff** — a coordinator agent that receives your instructions, dispatches tasks to workers, and sends daily briefings. Talk to it via Telegram (recommended), terminal, or remote control.
 - **Worker agents** — project-specific agents that poll for work, execute tasks, and report status.
 - **No direct agent-to-agent communication.** All coordination happens through the shared markdown files.
 
@@ -33,7 +33,7 @@ In your terminal, start Claude Code and run:
 
 This creates your team directory, config, and chief of staff agent note. It will ask for:
 - Team directory path (default: `~/cortex-team`)
-- Telegram bot token and chat ID
+- Telegram bot token and chat ID (optional, recommended)
 - Heartbeat interval and daily schedule times
 
 **3. Join as chief of staff**
