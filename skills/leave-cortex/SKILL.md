@@ -47,9 +47,10 @@ If CLAUDE.md contains a `## Cortex` section (the line `## Cortex` through the ne
 
 Read `~/.cortex/config.yaml` to get `team_dir`.
 
-If config exists and `<team_dir>/agents/<slug>.md` exists, update the frontmatter `status` field to `inactive` using the Edit tool:
+If config exists and `<team_dir>/agents/<slug>.md` exists, read the agent note and check the current `status` field:
 
-Replace `status: active` with `status: inactive`.
+- If `status: active`, replace with `status: inactive` using the Edit tool.
+- If `status: inactive` (already inactive), skip — no change needed.
 
 If the config or agent note doesn't exist, skip this step (already cleaned up or never registered).
 

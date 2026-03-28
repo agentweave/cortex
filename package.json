@@ -8,5 +8,10 @@
     "skills/join-cortex",
     "skills/leave-cortex"
   ],
+  "author": "Kai Chen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaichen/cortex"
+  },
   "license": "MIT"
 }

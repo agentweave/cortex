@@ -105,7 +105,18 @@ chief_of_staff_project: "~/Projects/chief-of-staff"
     dashboard.md
   templates/
     agent-template.md
+    project-template.md
 ```
+
+## Slug Derivation
+
+Agent names are converted to slugs for file naming: lowercase, spaces replaced with hyphens, special characters stripped.
+
+| Name | Slug | File |
+|------|------|------|
+| Billing Dev | billing-dev | `agents/billing-dev.md` |
+| Chief of Staff | chief-of-staff | `agents/chief-of-staff.md` |
+| Dashboard Dev | dashboard-dev | `agents/dashboard-dev.md` |
 
 ## License
 

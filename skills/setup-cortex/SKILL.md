@@ -56,7 +56,25 @@ Last session: --
 Status: registered
 ```
 
-### 5. Ask for Telegram configuration
+### 5. Write project template
+
+Write `<team_dir>/templates/project-template.md`:
+
+```
+---
+type: project
+created: YYYY-MM-DD
+status: active
+---
+
+## Next Action
+
+## Notes
+
+## Work Queue
+```
+
+### 6. Ask for Telegram configuration
 
 Ask: "Cortex uses Telegram for the chief of staff to communicate with you. Do you have a Telegram bot set up?"
 
@@ -74,13 +92,13 @@ If no: guide them:
 
 If they want to skip Telegram for now, allow it — set both values to empty strings in config.
 
-### 6. Ask for chief of staff project directory
+### 7. Ask for chief of staff project directory
 
 Ask: "Where does the chief of staff agent run? This is the project directory where the chief of staff's Claude Code session lives."
 
 Default: the team directory itself.
 
-### 7. Ask for heartbeat and schedule preferences
+### 8. Ask for heartbeat and schedule preferences
 
 Ask: "How often should agents poll for new work (in minutes)?"
 Default: 15
@@ -91,7 +109,7 @@ Default: 09:00
 Ask: "What time should the daily review be sent? (HH:MM, 24h format)"
 Default: 18:00
 
-### 8. Write config
+### 9. Write config
 
 Create the `~/.cortex/` directory if it doesn't exist, then write `~/.cortex/config.yaml`:
 
@@ -105,7 +123,7 @@ telegram_chat_id: "<chat_id>"
 chief_of_staff_project: "<cos_project_dir>"
 ```
 
-### 9. Create chief of staff agent note
+### 10. Create chief of staff agent note
 
 Write `<team_dir>/agents/chief-of-staff.md`:
 
@@ -135,7 +153,7 @@ Last session: --
 Status: registered
 ```
 
-### 10. Confirm
+### 11. Confirm
 
 Respond:
 
