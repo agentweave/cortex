@@ -19,8 +19,18 @@ You --> Chief of Staff (Claude Code) --> Team Directory (markdown files) <-- Wor
 
 **1. Install the plugin**
 
+From a local clone:
+
 ```bash
-claude plugins add cortex
+claude plugins marketplace add /path/to/cortex --scope user
+claude plugins install cortex
+```
+
+From GitHub:
+
+```bash
+claude plugins marketplace add https://github.com/kaichen/cortex --scope user
+claude plugins install cortex
 ```
 
 **2. Run setup**
