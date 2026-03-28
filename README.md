@@ -2,7 +2,11 @@
 
 Coordinate a team of AI agents through a shared folder of markdown files.
 
-Cortex is a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that sets up a **chief of staff** agent to manage **worker agents** across projects. The chief of staff receives your instructions, dispatches work to agents, and monitors progress — all through plain markdown files with YAML frontmatter.
+Cortex is an open protocol for coordinating AI agents through plain markdown files. It ships with a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin, but the protocol works with any agent runtime — Codex, Cursor, Gemini CLI, or anything that can read and write files.
+
+A **chief of staff** agent manages **worker agents** across projects. The chief of staff receives your instructions, dispatches work to agents, and monitors progress — all through plain markdown with YAML frontmatter.
+
+**Not using Claude Code?** See the [protocol spec](docs/protocol.md) and [adapter examples](docs/adapters/) for your runtime.
 
 ## How It Works
 
@@ -223,6 +227,18 @@ cortex/
   README.md
   LICENSE
 ```
+
+## Other Runtimes
+
+Cortex is runtime-agnostic. The [protocol spec](docs/protocol.md) defines the team directory format, agent notes, work queues, and coordination rules. Any agent that can read and write files can participate.
+
+Adapter examples:
+- [Codex](docs/adapters/codex.md)
+- [Cursor](docs/adapters/cursor.md)
+- [Gemini CLI](docs/adapters/gemini-cli.md)
+- [Generic (any agent)](docs/adapters/generic.md)
+
+A mixed team — Claude Code chief of staff coordinating Codex and Gemini workers — works out of the box. The team directory is the universal interface.
 
 ## License
 
