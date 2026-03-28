@@ -236,6 +236,7 @@ Adapter examples:
 - [Codex](docs/adapters/codex.md)
 - [Cursor](docs/adapters/cursor.md)
 - [Gemini CLI](docs/adapters/gemini-cli.md)
+- [OpenCode](docs/adapters/opencode.md)
 - [Generic (any agent)](docs/adapters/generic.md)
 
 A mixed team — Claude Code chief of staff coordinating Codex and Gemini workers — works out of the box. The team directory is the universal interface.
