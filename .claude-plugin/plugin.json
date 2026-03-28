@@ -1,0 +1,17 @@
+{
+  "name": "cortex",
+  "description": "Coordinate a team of AI agents through a shared folder of markdown files",
+  "version": "0.1.0",
+  "author": {
+    "name": "Kai Chen"
+  },
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "coordination",
+    "team",
+    "markdown",
+    "skills"
+  ],
+  "skills": "./skills/"
+}
