@@ -40,6 +40,3 @@ docs/
 - Steps are numbered and sequential — renumber if you insert or remove steps
 - Templates (agent notes, TEAM.md) are embedded inline with `{placeholder}` syntax
 - After editing, sync the plugin cache: `rsync -av --exclude='.git' --exclude='TEAM.md' --exclude='SESSION_LOG.md' ~/Projects/cortex/ ~/.claude/plugins/cache/cortex-local/cortex/0.2.0/`
-
-## Cortex
-On session start, run /cortex:join-cortex Cortex Dev to sync with Cortex. See TEAM.md for full protocol.
