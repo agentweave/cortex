@@ -56,6 +56,8 @@ In the chief of staff's project directory:
 /join-cortex Chief of Staff
 ```
 
+This generates `TEAM.md`, updates `CLAUDE.md`, and automatically starts the heartbeat (polls for work every 15 min). The heartbeat restarts on each session when `/join-cortex` runs.
+
 **4. Register a worker agent**
 
 As the chief of staff (or in any session):

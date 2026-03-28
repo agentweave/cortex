@@ -74,24 +74,51 @@ If CLAUDE.md doesn't exist, create it with just that content.
 
 If CLAUDE.md already contains "join-cortex", do nothing (already configured).
 
-### 8. Suggest heartbeat setup
+### 8. Start heartbeat
 
-Respond with heartbeat guidance:
+Use CronCreate to start the heartbeat automatically. The cron fires every `{heartbeat_minutes}` minutes.
 
-> "To enable the heartbeat (polls for new work every {heartbeat_minutes} minutes), start Claude Code with `/loop` or set up a cron:
-> ```
-> CronCreate with cron "*/{heartbeat_minutes} * * * *"
-> ```"
+**For worker agents** (slug is NOT `chief-of-staff`), create a cron with:
+- cron: `*/{heartbeat_minutes} * * * *`
+- prompt:
+
+```
+Heartbeat: Poll for new work per TEAM.md protocol.
+
+1. Read agent note at {team_dir}/agents/{slug}.md
+2. Check for new tasks in linked project work queues — read each project note listed in ## Projects and check its ## Work Queue for tasks with status "ready"
+3. If any tasks have status "ready":
+   - Mark them "in-progress" (edit the file)
+   - Do the work
+   - Mark them "done" and append a summary
+   - Update agent note Session Log
+4. Update last-heartbeat in agent note frontmatter to current ISO timestamp (YYYY-MM-DDTHH:MM)
+5. If no new work, just update last-heartbeat (silent heartbeat)
+```
+
+**For chief of staff** (slug IS `chief-of-staff`), create a cron with:
+- cron: `*/{heartbeat_minutes} * * * *`
+- prompt:
+
+```
+Heartbeat: Coordinator poll per TEAM.md protocol.
+
+1. Check for user messages (via Telegram if configured)
+2. Read all agent notes in {team_dir}/agents/ — check last-heartbeat for staleness (> 30 min = likely down), check ## Session Log for blockers
+3. Read all project notes in {team_dir}/projects/ — check ## Work Queue for status updates
+4. Flag any issues to the user
+5. Update last-heartbeat in {team_dir}/agents/chief-of-staff.md frontmatter to current ISO timestamp (YYYY-MM-DDTHH:MM)
+```
 
 ### 9. Confirm
 
 If this was a first join (TEAM.md didn't exist before):
 
-> "Joined Cortex as **{name}**. TEAM.md generated, CLAUDE.md updated. This agent will auto-sync on every session start."
+> "Joined Cortex as **{name}**. TEAM.md generated, CLAUDE.md updated, heartbeat started (every {heartbeat_minutes} min)."
 
 If this was a re-run (TEAM.md already existed):
 
-> "Synced **{name}** with latest Cortex config. TEAM.md regenerated."
+> "Synced **{name}** with latest Cortex config. TEAM.md regenerated, heartbeat restarted."
 
 ---
 
