@@ -1,6 +1,6 @@
 # Cortex
 
-Coordinate a team of AI agents through a shared folder of markdown files.
+Give your AI agents a chief of staff.
 
 Cortex is an open protocol for coordinating AI agents through plain markdown files. It ships with a [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin, but the protocol works with any agent runtime — Codex, Cursor, Gemini CLI, or anything that can read and write files.
 
