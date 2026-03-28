@@ -40,6 +40,7 @@ name: ""
 project: ""
 status: active
 joined: ""
+last-heartbeat: ""
 ---
 
 ## Role
@@ -128,6 +129,7 @@ name: Chief of Staff
 project: <cos_project_dir>
 status: active
 joined: <today's date YYYY-MM-DD>
+last-heartbeat: ""
 ---
 
 ## Role

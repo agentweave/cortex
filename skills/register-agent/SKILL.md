@@ -55,6 +55,7 @@ name: ""
 project: ""
 status: active
 joined: ""
+last-heartbeat: ""
 ---
 
 ## Role

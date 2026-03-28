@@ -110,6 +110,7 @@ Agents never talk to each other directly. All coordination flows through the tea
 
 - **Chief of staff writes tasks** to project notes' `## Work Queue` sections
 - **Workers poll** their project's work queue on a heartbeat, pick up `ready` tasks, and report `done`
+- **Heartbeat timestamps** — every agent updates a `last-heartbeat` field in its agent note on each poll. The chief of staff checks these to detect agents that have gone down (> 30 min stale)
 - **Status flows back** through agent notes' `## Session Log` — the chief of staff reads these to monitor progress
 
 This means agents don't need to run simultaneously. A worker can pick up tasks hours after the chief of staff wrote them.
