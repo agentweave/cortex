@@ -3,7 +3,7 @@
   "description": "Coordinate a team of AI agents through a shared folder of markdown files",
   "version": "0.2.0",
   "author": {
-    "name": "Kai Chen"
+    "name": "agentweave"
   },
   "license": "MIT",
   "keywords": [

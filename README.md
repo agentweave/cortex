@@ -27,17 +27,17 @@ From a local clone:
 
 ```bash
 claude plugins marketplace add /path/to/cortex --scope user
-claude plugins install cortex@cortex-local
+claude plugins install cortex@agentweave
 ```
 
-From GitHub (repo not published yet — use local clone for now):
+From GitHub:
 
 ```bash
-claude plugins marketplace add https://github.com/kaichen/cortex --scope user
-claude plugins install cortex@cortex-local
+claude plugins marketplace add https://github.com/agentweave/cortex --scope user
+claude plugins install cortex@agentweave
 ```
 
-The marketplace name (`cortex-local`) comes from `.claude-plugin/marketplace.json` in the repo. This file is required for the plugin system to discover and install the plugin.
+The marketplace name (`agentweave`) comes from `.claude-plugin/marketplace.json` in the repo. This file is required for the plugin system to discover and install the plugin.
 
 **2. Run setup**
 

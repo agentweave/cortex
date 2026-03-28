@@ -8,10 +8,12 @@
     "skills/join-cortex",
     "skills/leave-cortex"
   ],
-  "author": "Kai Chen",
+  "author": {
+    "name": "agentweave"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kaichen/cortex"
+    "url": "https://github.com/agentweave/cortex"
   },
   "license": "MIT"
 }

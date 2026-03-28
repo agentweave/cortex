@@ -19,7 +19,7 @@ Remove this agent from Cortex by cleaning up local protocol files and updating t
 
 Use the provided `<agent-name>`.
 
-Derive the slug: lowercase, replace spaces with hyphens.
+Derive the slug: lowercase, replace spaces with hyphens, strip any characters that are not alphanumeric or hyphens.
 
 ### 2. Check current state
 
@@ -43,7 +43,11 @@ rm TEAM.md
 
 If CLAUDE.md contains a `## Cortex` section (the line `## Cortex` through the next `##` heading or end of file), remove that entire section using the Edit tool.
 
-### 5. Update agent note in team directory
+### 5. Cancel heartbeat cron
+
+Use CronList to find any active Cortex heartbeat cron (look for jobs with "Heartbeat" in the prompt). If found, cancel it with CronDelete. If no cron is found, skip — the agent may not have had a heartbeat running.
+
+### 6. Update agent note in team directory
 
 Read `~/.cortex/config.yaml` to get `team_dir`.
 
@@ -54,7 +58,7 @@ If config exists and `<team_dir>/agents/<slug>.md` exists, read the agent note a
 
 If the config or agent note doesn't exist, skip this step (already cleaned up or never registered).
 
-### 6. Confirm
+### 7. Confirm
 
 Respond:
 

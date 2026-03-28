@@ -26,7 +26,7 @@ If config doesn't exist, stop and respond:
 
 Use the provided `<agent-name>`.
 
-Derive the slug: lowercase, replace spaces with hyphens (e.g., "Billing Dev" -> "billing-dev").
+Derive the slug: lowercase, replace spaces with hyphens, strip any characters that are not alphanumeric or hyphens (e.g., "Billing Dev" -> "billing-dev").
 
 ### 3. Check for existing agent
 

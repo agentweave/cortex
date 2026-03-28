@@ -1,5 +1,7 @@
 # Cortex: Agent Team Coordination Plugin for Claude Code
 
+> **Note:** This is the original design spec. The implementation has evolved — see the skills and README for the current state. Key divergences: Telegram bot token removed from config (handled by Telegram plugin), plain markdown files instead of Obsidian-specific tooling.
+
 ## Overview
 
 Cortex is a Claude Code plugin that lets users coordinate a team of AI agents through a shared folder of markdown files. A chief of staff agent receives instructions from the user, dispatches work to project-specific worker agents, and monitors progress — all through plain markdown with YAML frontmatter. The user can talk to the chief of staff via Telegram (recommended), terminal, or remote control.
@@ -79,6 +81,7 @@ Created by `/setup-cortex`:
     dashboard.md
   templates/
     agent-template.md
+    project-template.md
 ```
 
 ## Agent Notes
@@ -275,14 +278,4 @@ The chief of staff runs in its own Claude Code session. Its `project` path in th
 
 ## Naming
 
-Working name: "Cortex." The name has conflicts in the AI/dev tools space (Palo Alto Networks Cortex, Snowflake Cortex, janhq/cortex). Needs a more distinctive name before public release.
-
-Candidates to consider:
-- **Hivemind** — collective intelligence, agent swarm coordination
-- **Dispatch** — the core action (chief of staff dispatches work)
-- **Relay** — agents relay status through shared state
-- **Cadence** — heartbeats, daily rhythms, coordination tempo
-- **Syndicate** — a group working together toward a goal
-- **Nexus** — connection point between agents
-
-Decision deferred until closer to public release. Using "Cortex" internally for now.
+Name "Cortex" kept for the project. Published under the `agentweave` GitHub org at `agentweave/cortex`.

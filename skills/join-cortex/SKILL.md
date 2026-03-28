@@ -26,7 +26,7 @@ If config doesn't exist, stop and respond:
 
 Use the provided `<agent-name>`.
 
-Derive the slug: lowercase, replace spaces with hyphens.
+Derive the slug: lowercase, replace spaces with hyphens, strip any characters that are not alphanumeric or hyphens.
 
 ### 3. Read agent note
 

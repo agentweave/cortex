@@ -1,5 +1,7 @@
 # Cortex Plugin Implementation Plan
 
+> **Note:** This is the original implementation plan. The plugin has evolved since — see the skills and README for the current state.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build a Claude Code plugin that coordinates a team of AI agents through a shared folder of markdown files.
@@ -203,7 +205,6 @@ team_dir: <team_dir>
 heartbeat_minutes: <heartbeat>
 daily_briefing: "<briefing_time>"
 daily_review: "<review_time>"
-telegram_bot_token: "<token>"
 telegram_chat_id: "<chat_id>"
 chief_of_staff_project: "<cos_project_dir>"
 ```
@@ -794,7 +795,6 @@ team_dir: ~/cortex-team
 heartbeat_minutes: 15
 daily_briefing: "09:00"
 daily_review: "18:00"
-telegram_bot_token: "your-bot-token"
 telegram_chat_id: "your-chat-id"
 chief_of_staff_project: "~/Projects/chief-of-staff"
 ```
@@ -893,12 +893,12 @@ git commit -m "fix: address issues found during integration testing"
 
 ---
 
-### Task 8: Update Vault and Session Log
+### Task 8: Update Agent Note and Session Log
 
 **Files:**
-- Modify: `~/Projects/obsidian/My Second Brain/projects/cortex-open-source.md`
-- Modify: `~/Projects/obsidian/My Second Brain/agents/cortex-dev.md`
-- Create: `SESSION_LOG.md`
+- Modify: `<team_dir>/projects/<project>.md` — mark task done in work queue
+- Modify: `<team_dir>/agents/<agent>.md` — update session log
+- Create: `SESSION_LOG.md` — local session continuity
 
 - [ ] **Step 1: Update project note work queue**
 
@@ -906,7 +906,7 @@ Mark the implementation task as done with a summary.
 
 - [ ] **Step 2: Update agent session log**
 
-Update `agents/cortex-dev.md` Session Log with current date, status, and what was accomplished.
+Update the agent note's Session Log with current date, status, and what was accomplished.
 
 - [ ] **Step 3: Write SESSION_LOG.md**
 
