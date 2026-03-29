@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d1117">
 <title>Cortex — Give your AI agents a chief of staff</title>
 <meta name="description" content="Coordinate a team of AI agents through a shared folder of markdown files. Open protocol, any runtime.">
 <meta property="og:title" content="Cortex — Give your AI agents a chief of staff">
@@ -10,16 +11,17 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/agentweave/cortex/main/poster.png">
 <meta property="og:url" content="https://agentweave.github.io/cortex">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
   :root {
-    --bg: #0a0a14;
-    --bg-card: rgba(255,255,255,0.03);
+    --bg: #0d1117;
+    --bg-card: rgba(255,255,255,0.04);
     --border: rgba(255,255,255,0.08);
-    --text: rgba(255,255,255,0.85);
-    --text-dim: rgba(255,255,255,0.45);
-    --text-dimmer: rgba(255,255,255,0.25);
+    --text: rgba(255,255,255,0.88);
+    --text-dim: rgba(255,255,255,0.5);
+    --text-dimmer: rgba(255,255,255,0.28);
     --cyan: #00d2ff;
     --purple: #7b61ff;
     --pink: #ff6ec7;
@@ -50,11 +52,15 @@
     align-items: center;
   }
   .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 18px;
     font-weight: 700;
     color: var(--text);
     text-decoration: none;
   }
+  .nav-brand svg { flex-shrink: 0; }
   .nav-brand span {
     color: var(--text-dim);
     font-weight: 400;
@@ -75,7 +81,7 @@
 
   /* Hero */
   .hero {
-    padding: 100px 0 80px;
+    padding: 80px 0 60px;
     text-align: center;
     position: relative;
   }
@@ -90,6 +96,9 @@
     border-radius: 50%;
     background: radial-gradient(circle, rgba(123,97,255,0.08) 0%, transparent 60%);
     pointer-events: none;
+  }
+  .hero-logo {
+    margin-bottom: 32px;
   }
   .hero-eyebrow {
     font-size: 14px;
@@ -126,9 +135,7 @@
     font-size: 15px;
     color: var(--text-dim);
     margin-bottom: 16px;
-    cursor: pointer;
     transition: border-color 0.2s;
-    position: relative;
   }
   .hero-install:hover { border-color: rgba(255,255,255,0.2); }
   .hero-install span { color: var(--cyan); }
@@ -153,7 +160,9 @@
     font-size: 15px;
     color: var(--text-dim);
     line-height: 1.8;
-    white-space: pre;
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-align: center;
   }
   .architecture .highlight { color: var(--cyan); }
   .architecture .accent { color: var(--purple); }
@@ -213,7 +222,7 @@
     line-height: 1.6;
   }
   .step code {
-    display: inline-block;
+    display: block;
     margin-top: 12px;
     padding: 8px 14px;
     background: rgba(0,0,0,0.3);
@@ -221,6 +230,9 @@
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: 13px;
     color: var(--cyan);
+  }
+  .step code + code {
+    margin-top: 8px;
   }
 
   /* How it works */
@@ -244,11 +256,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
   }
-  .how-icon-cyan { background: rgba(0,210,255,0.1); color: var(--cyan); }
-  .how-icon-purple { background: rgba(123,97,255,0.1); color: var(--purple); }
-  .how-icon-pink { background: rgba(255,110,199,0.1); color: var(--pink); }
+  .how-icon-cyan { background: rgba(0,210,255,0.1); }
+  .how-icon-purple { background: rgba(123,97,255,0.1); }
+  .how-icon-pink { background: rgba(255,110,199,0.1); }
   .how-card h3 {
     font-size: 16px;
     font-weight: 600;
@@ -285,9 +296,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-dim);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .runtime:hover .runtime-icon {
+    border-color: rgba(0,210,255,0.3);
+    box-shadow: 0 0 20px rgba(0,210,255,0.08);
+  }
+  .runtime-icon svg { width: 28px; height: 28px; }
+  .runtime-icon.rt-native {
+    background: rgba(0,210,255,0.08);
+    border-color: rgba(0,210,255,0.2);
   }
   .runtime-name {
     font-size: 13px;
@@ -358,7 +379,10 @@
     justify-content: space-between;
     align-items: center;
   }
-  footer span {
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 13px;
     color: var(--text-dimmer);
   }
@@ -375,6 +399,7 @@
     .runtimes { gap: 24px; }
     .architecture { font-size: 12px; padding: 24px; }
     .hero h1 { font-size: 40px; letter-spacing: -2px; }
+    .nav-links { gap: 16px; }
   }
 
   /* Divider */
@@ -391,7 +416,32 @@
 
 <div class="container">
   <nav>
-    <a href="/" class="nav-brand">cortex <span>by agentweave</span></a>
+    <a href="./" class="nav-brand">
+      <!-- Cortex logo inline (small) -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="28" height="28">
+        <defs>
+          <linearGradient id="n-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e"/><stop offset="100%" style="stop-color:#16213e"/></linearGradient>
+          <linearGradient id="n-ac" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00d2ff"/><stop offset="100%" style="stop-color:#7b61ff"/></linearGradient>
+        </defs>
+        <rect x="16" y="16" width="480" height="480" rx="96" fill="url(#n-bg)"/>
+        <circle cx="256" cy="256" r="36" fill="url(#n-ac)" opacity="0.95"/>
+        <circle cx="256" cy="256" r="24" fill="#1a1a2e"/>
+        <circle cx="256" cy="256" r="12" fill="url(#n-ac)"/>
+        <circle cx="256" cy="120" r="22" fill="url(#n-ac)" opacity="0.85"/><circle cx="256" cy="120" r="10" fill="#1a1a2e"/>
+        <circle cx="373" cy="188" r="22" fill="url(#n-ac)" opacity="0.85"/><circle cx="373" cy="188" r="10" fill="#1a1a2e"/>
+        <circle cx="373" cy="324" r="22" fill="url(#n-ac)" opacity="0.85"/><circle cx="373" cy="324" r="10" fill="#1a1a2e"/>
+        <circle cx="256" cy="392" r="22" fill="url(#n-ac)" opacity="0.85"/><circle cx="256" cy="392" r="10" fill="#1a1a2e"/>
+        <circle cx="139" cy="324" r="22" fill="url(#n-ac)" opacity="0.85"/><circle cx="139" cy="324" r="10" fill="#1a1a2e"/>
+        <circle cx="139" cy="188" r="22" fill="url(#n-ac)" opacity="0.85"/><circle cx="139" cy="188" r="10" fill="#1a1a2e"/>
+        <line x1="256" y1="220" x2="256" y2="142" stroke="url(#n-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="287" y1="235" x2="351" y2="198" stroke="url(#n-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="287" y1="277" x2="351" y2="314" stroke="url(#n-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="256" y1="292" x2="256" y2="370" stroke="url(#n-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="225" y1="277" x2="161" y2="314" stroke="url(#n-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="225" y1="235" x2="161" y2="198" stroke="url(#n-ac)" stroke-width="2.5" opacity="0.5"/>
+      </svg>
+      cortex <span>by agentweave</span>
+    </a>
     <ul class="nav-links">
       <li><a href="#how">How it works</a></li>
       <li><a href="#quickstart">Quick start</a></li>
@@ -404,6 +454,34 @@
 <!-- Hero -->
 <div class="container">
   <div class="hero">
+    <!-- Cortex logo -->
+    <div class="hero-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="88" height="88">
+        <defs>
+          <linearGradient id="h-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e"/><stop offset="100%" style="stop-color:#16213e"/></linearGradient>
+          <linearGradient id="h-ac" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00d2ff"/><stop offset="100%" style="stop-color:#7b61ff"/></linearGradient>
+          <linearGradient id="h-ac2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#7b61ff"/><stop offset="100%" style="stop-color:#00d2ff"/></linearGradient>
+        </defs>
+        <rect x="16" y="16" width="480" height="480" rx="96" fill="url(#h-bg)"/>
+        <circle cx="256" cy="256" r="36" fill="url(#h-ac)" opacity="0.95"/>
+        <circle cx="256" cy="256" r="24" fill="#1a1a2e"/>
+        <circle cx="256" cy="256" r="12" fill="url(#h-ac)"/>
+        <circle cx="256" cy="120" r="22" fill="url(#h-ac2)" opacity="0.85"/><circle cx="256" cy="120" r="10" fill="#1a1a2e"/>
+        <circle cx="373" cy="188" r="22" fill="url(#h-ac)" opacity="0.85"/><circle cx="373" cy="188" r="10" fill="#1a1a2e"/>
+        <circle cx="373" cy="324" r="22" fill="url(#h-ac2)" opacity="0.85"/><circle cx="373" cy="324" r="10" fill="#1a1a2e"/>
+        <circle cx="256" cy="392" r="22" fill="url(#h-ac)" opacity="0.85"/><circle cx="256" cy="392" r="10" fill="#1a1a2e"/>
+        <circle cx="139" cy="324" r="22" fill="url(#h-ac2)" opacity="0.85"/><circle cx="139" cy="324" r="10" fill="#1a1a2e"/>
+        <circle cx="139" cy="188" r="22" fill="url(#h-ac)" opacity="0.85"/><circle cx="139" cy="188" r="10" fill="#1a1a2e"/>
+        <line x1="256" y1="220" x2="256" y2="142" stroke="url(#h-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="287" y1="235" x2="351" y2="198" stroke="url(#h-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="287" y1="277" x2="351" y2="314" stroke="url(#h-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="256" y1="292" x2="256" y2="370" stroke="url(#h-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="225" y1="277" x2="161" y2="314" stroke="url(#h-ac)" stroke-width="2.5" opacity="0.5"/>
+        <line x1="225" y1="235" x2="161" y2="198" stroke="url(#h-ac)" stroke-width="2.5" opacity="0.5"/>
+        <circle cx="256" cy="256" r="52" fill="none" stroke="url(#h-ac)" stroke-width="1" opacity="0.15"/>
+        <circle cx="256" cy="256" r="72" fill="none" stroke="url(#h-ac)" stroke-width="0.5" opacity="0.08"/>
+      </svg>
+    </div>
     <div class="hero-eyebrow">Open protocol for AI agent coordination</div>
     <h1>Give your AI agents<br>a chief of staff.</h1>
     <p class="hero-sub">Coordinate agent teams through a shared folder of markdown files. Works with any AI runtime.</p>
@@ -415,7 +493,7 @@
 <!-- Architecture -->
 <div class="container">
   <div class="visual-section">
-    <div class="architecture"><span class="highlight">You</span> --> <span class="accent">Chief of Staff</span> (Claude Code) --> <span class="highlight">Team Directory</span> (markdown files) <-- <span class="accent">Worker Agents</span> (Claude Code)</div>
+    <div class="architecture"><span class="highlight">You</span> --&gt; <span class="accent">Chief of Staff</span> (Claude Code) --&gt; <span class="highlight">Team Directory</span> (markdown) &lt;-- <span class="accent">Worker Agents</span> (Claude Code)</div>
   </div>
 </div>
 
@@ -430,17 +508,23 @@
     </div>
     <div class="how-cards">
       <div class="how-card">
-        <div class="how-icon how-icon-cyan">&#9670;</div>
+        <div class="how-icon how-icon-cyan">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00d2ff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
+        </div>
         <h3>Chief of Staff</h3>
         <p>A coordinator agent that receives your instructions, dispatches tasks to workers, monitors progress, and sends daily briefings.</p>
       </div>
       <div class="how-card">
-        <div class="how-icon how-icon-purple">&#9679;</div>
+        <div class="how-icon how-icon-purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7b61ff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="9.5" y1="10.5" x2="5.5" y2="7.5"/><line x1="14.5" y1="10.5" x2="18.5" y2="7.5"/><line x1="9.5" y1="13.5" x2="5.5" y2="16.5"/><line x1="14.5" y1="13.5" x2="18.5" y2="16.5"/></svg>
+        </div>
         <h3>Worker Agents</h3>
         <p>Project-specific agents that poll for work on a heartbeat, execute tasks, and report status back through the shared folder.</p>
       </div>
       <div class="how-card">
-        <div class="how-icon how-icon-pink">&#9724;</div>
+        <div class="how-icon how-icon-pink">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff6ec7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        </div>
         <h3>Team Directory</h3>
         <p>A shared folder of markdown files that acts as the message bus. Agent notes, project notes, and work queues. No direct agent-to-agent communication.</p>
       </div>
@@ -475,14 +559,15 @@
   <div class="section">
     <div class="section-header">
       <h2>Quick start</h2>
-      <p>Four commands to a coordinated agent team.</p>
+      <p>Get a coordinated agent team running in minutes.</p>
     </div>
     <div class="steps">
       <div class="step">
         <div class="step-num">Step 1</div>
         <h3>Install the plugin</h3>
-        <p>Add the agentweave marketplace and install Cortex.</p>
-        <code>claude plugins marketplace add agentweave/cortex</code>
+        <p>Add the marketplace source and install Cortex.</p>
+        <code>claude plugins marketplace add https://github.com/agentweave/cortex --scope user</code>
+        <code>claude plugins install cortex@agentweave</code>
       </div>
       <div class="step">
         <div class="step-num">Step 2</div>
@@ -499,8 +584,9 @@
       <div class="step">
         <div class="step-num">Step 4</div>
         <h3>Add worker agents</h3>
-        <p>Register agents and onboard them in their project directories.</p>
+        <p>Register the agent, then onboard it in its project directory.</p>
         <code>/register-agent Billing Dev</code>
+        <code>/join-cortex Billing Dev</code>
       </div>
     </div>
   </div>
@@ -515,27 +601,39 @@
     </div>
     <div class="runtimes">
       <div class="runtime">
-        <div class="runtime-icon" style="background: rgba(0,210,255,0.08); border-color: rgba(0,210,255,0.15);">CC</div>
+        <div class="runtime-icon rt-native">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00d2ff" stroke-width="2" stroke-linecap="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        </div>
         <div class="runtime-name">Claude Code</div>
       </div>
       <div class="runtime">
-        <div class="runtime-icon">Cdx</div>
+        <div class="runtime-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
         <div class="runtime-name">Codex</div>
       </div>
       <div class="runtime">
-        <div class="runtime-icon">Cur</div>
+        <div class="runtime-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 3l14 9-14 9V3z"/></svg>
+        </div>
         <div class="runtime-name">Cursor</div>
       </div>
       <div class="runtime">
-        <div class="runtime-icon">Gem</div>
+        <div class="runtime-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
         <div class="runtime-name">Gemini CLI</div>
       </div>
       <div class="runtime">
-        <div class="runtime-icon">OC</div>
+        <div class="runtime-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+        </div>
         <div class="runtime-name">OpenCode</div>
       </div>
       <div class="runtime">
-        <div class="runtime-icon">...</div>
+        <div class="runtime-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+        </div>
         <div class="runtime-name">Any agent</div>
       </div>
     </div>
@@ -554,7 +652,20 @@
 <!-- Footer -->
 <div class="container">
   <footer>
-    <span>MIT License &middot; agentweave</span>
+    <div class="footer-brand">
+      <!-- Agentweave logo inline (small) -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
+        <defs>
+          <linearGradient id="f-s1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00d2ff"/><stop offset="50%" style="stop-color:#7b61ff"/><stop offset="100%" style="stop-color:#ff6ec7"/></linearGradient>
+          <linearGradient id="f-s2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#ff6ec7"/><stop offset="50%" style="stop-color:#7b61ff"/><stop offset="100%" style="stop-color:#00d2ff"/></linearGradient>
+        </defs>
+        <rect x="16" y="16" width="480" height="480" rx="96" fill="#0f0f1a"/>
+        <path d="M 120 140 C 180 200, 200 280, 256 256 C 312 232, 332 312, 392 372" fill="none" stroke="url(#f-s1)" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+        <path d="M 392 140 C 332 200, 312 280, 256 256 C 200 232, 180 312, 120 372" fill="none" stroke="url(#f-s2)" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+        <circle cx="256" cy="256" r="8" fill="url(#f-s1)" opacity="0.95"/>
+      </svg>
+      <span>MIT License &middot; agentweave</span>
+    </div>
     <a href="https://github.com/agentweave/cortex">github.com/agentweave/cortex</a>
   </footer>
 </div>
