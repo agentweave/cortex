@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Cortex by agentweave</title>
+<style>
+  body {
+    font-family: -apple-system, 'Inter', sans-serif;
+    max-width: 640px;
+    margin: 60px auto;
+    padding: 0 24px;
+    color: #e5e7eb;
+    background: #111827;
+    line-height: 1.7;
+  }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  .updated { color: #9ca3af; font-size: 14px; margin-bottom: 32px; }
+  h2 { font-size: 20px; margin-top: 32px; margin-bottom: 12px; }
+  p { color: #d1d5db; margin-bottom: 16px; }
+  a { color: #00d2ff; }
+  .back { margin-top: 48px; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>Privacy Policy</h1>
+<div class="updated">Last updated: March 29, 2026</div>
+
+<h2>No data collection</h2>
+<p>Cortex does not collect, transmit, or store any personal data. There is no telemetry, no analytics, and no network calls made by the plugin.</p>
+
+<h2>How Cortex works</h2>
+<p>All coordination happens through local markdown files in your team directory — a folder on your machine that you control. Agent notes, project notes, and work queues are plain text files that never leave your filesystem unless you choose to share them (e.g., via git).</p>
+
+<h2>Configuration</h2>
+<p>Cortex stores configuration at <code>~/.cortex/config.yaml</code> on your local machine. This file may contain a Telegram chat ID if you choose to configure Telegram integration. This data stays on your machine and is never sent to agentweave or any third party.</p>
+
+<h2>Third-party services</h2>
+<p>If you configure Telegram integration, messages are sent through Telegram's API via the Claude Code Telegram plugin — not through Cortex. Cortex itself makes no network requests.</p>
+
+<h2>Open source</h2>
+<p>Cortex is fully open source under the MIT License. You can inspect every line of code at <a href="https://github.com/agentweave/cortex">github.com/agentweave/cortex</a>.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy? Open an issue at <a href="https://github.com/agentweave/cortex/issues">github.com/agentweave/cortex/issues</a>.</p>
+
+<div class="back"><a href="./">Back to Cortex</a></div>
+</body>
+</html>
