@@ -395,20 +395,26 @@
 
   /* Responsive */
   @media (max-width: 768px) {
+    .container { padding: 0 20px; }
     .steps, .how-cards { grid-template-columns: 1fr; }
-    .runtimes { gap: 24px; }
-    .architecture { font-size: 12px; padding: 24px; }
-    .hero h1 { font-size: 40px; letter-spacing: -2px; }
+    .hero h1 { font-size: 36px; letter-spacing: -1.5px; }
+    .hero-sub { font-size: 16px; }
+    .hero { padding: 60px 0 40px; }
+    .hero-install { font-size: 12px; padding: 12px 16px; max-width: 100%; word-break: break-all; }
     .nav-links { display: none; }
     .nav-mobile { display: flex !important; }
-    .hero-install { font-size: 13px; padding: 12px 20px; }
-    .architecture { font-size: 11px; padding: 16px; overflow-x: auto; }
-    .wq-demo { padding: 20px; font-size: 12px; overflow-x: auto; }
-    .step code { font-size: 11px; overflow-x: auto; }
+    .visual-section { padding: 20px 0 40px; }
+    .architecture { font-size: 11px; padding: 16px; white-space: normal; text-align: center; line-height: 2; }
+    .wq-demo { padding: 16px; font-size: 11px; overflow-x: auto; }
+    .step code { font-size: 11px; word-break: break-all; }
     .section { padding: 48px 0; }
     .section-header h2 { font-size: 28px; }
-    .runtimes { gap: 20px 32px; }
-    .runtime-icon { width: 52px; height: 52px; }
+    .section-header p { font-size: 15px; }
+    .runtimes { gap: 20px 28px; }
+    .runtime-icon { width: 48px; height: 48px; }
+    .runtime-icon svg { width: 22px; height: 22px; }
+    .runtime-name { font-size: 11px; }
+    .cta h2 { font-size: 28px; }
     footer { flex-direction: column; gap: 12px; text-align: center; }
   }
   .nav-mobile {
