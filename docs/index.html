@@ -399,8 +399,24 @@
     .runtimes { gap: 24px; }
     .architecture { font-size: 12px; padding: 24px; }
     .hero h1 { font-size: 40px; letter-spacing: -2px; }
-    .nav-links { gap: 16px; }
+    .nav-links { display: none; }
+    .nav-mobile { display: flex !important; }
+    .hero-install { font-size: 13px; padding: 12px 20px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
   }
+  .nav-mobile {
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+  .nav-mobile a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-mobile a:hover { color: var(--text); }
 
   /* Divider */
   .divider {
@@ -448,6 +464,9 @@
       <li><a href="#protocol">Protocol</a></li>
       <li><a href="https://github.com/agentweave/cortex">GitHub</a></li>
     </ul>
+    <div class="nav-mobile">
+      <a href="https://github.com/agentweave/cortex">GitHub</a>
+    </div>
   </nav>
 </div>
 
