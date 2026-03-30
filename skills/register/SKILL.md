@@ -1,11 +1,11 @@
 ---
-name: register-agent
+name: register
 description: Register a new agent in Cortex — creates an agent note in the team directory from the template.
 user_invocable: true
 argument-hint: <agent-name>
 ---
 
-# /register-agent — Register a New Cortex Agent
+# /register — Register a New Cortex Agent
 
 Create an agent note for a new team member. Run this as the chief of staff or from any session with access to the team directory.
 
@@ -20,7 +20,7 @@ Create an agent note for a new team member. Run this as the chief of staff or fr
 Read `~/.cortex/config.yaml` to get `team_dir`.
 
 If config doesn't exist, stop and respond:
-> "Cortex is not set up yet. Run `/setup-cortex` first."
+> "Cortex is not set up yet. Run `/setup` first."
 
 ### 2. Resolve name and slug
 
@@ -95,5 +95,5 @@ Respond:
 >
 > **Next step:** In the agent's project directory (`<project_path>`), run:
 > ```
-> /join-cortex <name>
+> /join <name>
 > ```"

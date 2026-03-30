@@ -1,11 +1,11 @@
 ---
-name: leave-cortex
+name: leave
 description: Leave the Cortex agent team — removes .cortex.md, cleans CLAUDE.local.md, sets agent status to inactive in team directory.
 user_invocable: true
 argument-hint: <agent-name>
 ---
 
-# /leave-cortex — Leave the Cortex Agent Team
+# /leave — Leave the Cortex Agent Team
 
 Remove this agent from Cortex by cleaning up local protocol files and updating the team directory.
 
@@ -24,7 +24,7 @@ Derive the slug: lowercase, replace spaces with hyphens, strip any characters th
 ### 2. Check current state
 
 Check if `.cortex.md` exists in the current working directory.
-Check if `CLAUDE.local.md` contains "join-cortex".
+Check if `CLAUDE.local.md` contains "## Cortex".
 
 If neither exists, respond:
 > "This agent doesn't appear to be on the Cortex team. Nothing to clean up."

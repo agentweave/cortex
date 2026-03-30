@@ -1,11 +1,11 @@
 ---
-name: join-cortex
+name: join
 description: Join the Cortex agent team — reads agent config from team directory, generates .cortex.md protocol, updates CLAUDE.local.md. Idempotent — safe to re-run as a sync.
 user_invocable: true
 argument-hint: <agent-name>
 ---
 
-# /join-cortex — Join the Cortex Agent Team
+# /join — Join the Cortex Agent Team
 
 Onboard this agent to Cortex by reading its config from the team directory and generating the local protocol file.
 
@@ -20,7 +20,7 @@ Onboard this agent to Cortex by reading its config from the team directory and g
 Read `~/.cortex/config.yaml` to get `team_dir`, `heartbeat_minutes`, `daily_briefing`, and `daily_review`.
 
 If config doesn't exist, stop and respond:
-> "Cortex is not set up yet. Run `/setup-cortex` first."
+> "Cortex is not set up yet. Run `/setup` first."
 
 ### 2. Resolve name and slug
 
@@ -33,7 +33,7 @@ Derive the slug: lowercase, replace spaces with hyphens, strip any characters th
 Read `<team_dir>/agents/<slug>.md`.
 
 If the file doesn't exist, stop and respond:
-> "Agent `<name>` is not registered in Cortex. Run `/register-agent <name>` to create the agent note first."
+> "Agent `<name>` is not registered in Cortex. Run `/register <name>` to create the agent note first."
 
 ### 4. Extract config from agent note
 
@@ -62,17 +62,17 @@ Replace all `{placeholder}` values with the actual extracted values.
 
 Read the CLAUDE.local.md in the current working directory.
 
-If it exists and does NOT already contain the text "join-cortex":
+If it exists and does NOT already contain the text "## Cortex":
 - Append this section at the very end:
 
 ```
 ## Cortex
-On session start, run /join-cortex <name> to sync with Cortex. See .cortex.md for full protocol.
+On session start, run /join <name> to sync with Cortex. See .cortex.md for full protocol.
 ```
 
 If CLAUDE.local.md doesn't exist, create it with just that content.
 
-If CLAUDE.local.md already contains "join-cortex", do nothing (already configured).
+If CLAUDE.local.md already contains "## Cortex", do nothing (already configured).
 
 ### 8. Start heartbeat
 
@@ -143,7 +143,7 @@ You are **{name}**, the coordinator of Cortex — a team of AI agents.
 ## Protocol
 
 ### Session Start
-1. Run /join-cortex {name} to sync with latest config
+1. Run /join {name} to sync with latest config
 
 ### Coordinator Duties
 2. Check for user messages (via Telegram if configured, or wait for terminal/remote control input)
@@ -162,8 +162,8 @@ You are **{name}**, the coordinator of Cortex — a team of AI agents.
 7. The assigned agent will pick up the task on its next heartbeat
 
 ### Registering New Agents
-8. Run /register-agent <name> to create a new agent note
-9. Tell the user to run /join-cortex <name> in the agent's project directory
+8. Run /register <name> to create a new agent note
+9. Tell the user to run /join <name> in the agent's project directory
 
 ### Daily Briefing ({daily_briefing})
 10. Scan all agents and projects
@@ -218,7 +218,7 @@ You are **{name}**, a member of Cortex — a coordinated team of AI agents.
 ## Protocol
 
 ### Session Start
-1. Run /join-cortex {name} to sync with latest config
+1. Run /join {name} to sync with latest config
 
 ### Checking for Work
 2. Read your agent note to find your linked projects

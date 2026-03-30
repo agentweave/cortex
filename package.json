@@ -3,10 +3,10 @@
   "version": "0.3.0",
   "description": "Coordinate a team of AI agents through a shared folder of markdown files",
   "skills": [
-    "skills/setup-cortex",
-    "skills/register-agent",
-    "skills/join-cortex",
-    "skills/leave-cortex"
+    "skills/setup",
+    "skills/register",
+    "skills/join",
+    "skills/leave"
   ],
   "author": {
     "name": "agentweave"

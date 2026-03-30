@@ -1,10 +1,10 @@
 ---
-name: setup-cortex
+name: setup
 description: First-time Cortex setup — creates team directory, config, and chief of staff agent.
 user_invocable: true
 ---
 
-# /setup-cortex — First-Time Cortex Setup
+# /setup — First-Time Cortex Setup
 
 Set up Cortex for coordinating a team of AI agents through a shared markdown folder.
 
@@ -139,7 +139,7 @@ Coordinate the Cortex agent team — receive instructions from the user, dispatc
 (All projects — the chief of staff monitors every project in the team directory)
 
 ## Capabilities
-- Agent registration and onboarding via /register-agent
+- Agent registration and onboarding via /register
 - Work dispatch — write tasks to project work queues
 - Agent monitoring — read session logs, detect staleness and blockers
 - Daily briefing (morning) and review (evening)
@@ -161,6 +161,6 @@ Respond:
 > - Chief of staff registered at `agents/chief-of-staff.md`
 >
 > **Next steps:**
-> 1. In the chief of staff's project (`<cos_project_dir>`), run `/join-cortex Chief of Staff`
-> 2. To add worker agents, have the chief of staff run `/register-agent <name>`
-> 3. In each worker's project, run `/join-cortex <name>`"
+> 1. In the chief of staff's project (`<cos_project_dir>`), run `/join Chief of Staff`
+> 2. To add worker agents, have the chief of staff run `/register <name>`
+> 3. In each worker's project, run `/join <name>`"

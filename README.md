@@ -44,7 +44,7 @@ The marketplace name (`agentweave`) comes from `.claude-plugin/marketplace.json`
 In your terminal, start Claude Code and run:
 
 ```
-/setup-cortex
+/setup
 ```
 
 This creates your team directory, config, and chief of staff agent note. It will ask for:
@@ -57,28 +57,28 @@ This creates your team directory, config, and chief of staff agent note. It will
 In the chief of staff's project directory:
 
 ```
-/join-cortex Chief of Staff
+/join Chief of Staff
 ```
 
-This generates `.cortex.md` (the protocol file), updates `CLAUDE.local.md`, and automatically starts the heartbeat (polls for work every 15 min). The heartbeat restarts on each session when `/join-cortex` runs.
+This generates `.cortex.md` (the protocol file), updates `CLAUDE.local.md`, and automatically starts the heartbeat (polls for work every 15 min). The heartbeat restarts on each session when `/join` runs.
 
 **4. Register a worker agent**
 
 As the chief of staff (or in any session):
 
 ```
-/register-agent Billing Dev
+/register Billing Dev
 ```
 
 Then in the worker's project directory:
 
 ```
-/join-cortex Billing Dev
+/join Billing Dev
 ```
 
 ## What You Get
 
-When an agent runs `/join-cortex`, two files are created in the project:
+When an agent runs `/join`, two files are created in the project:
 
 **`.cortex.md`** — the full protocol that tells the agent how to operate:
 
@@ -107,7 +107,7 @@ You are **Billing Dev**, a member of Cortex — a coordinated team of AI agents.
 
 ```markdown
 ## Cortex
-On session start, run /join-cortex Billing Dev to sync with Cortex. See .cortex.md for full protocol.
+On session start, run /join Billing Dev to sync with Cortex. See .cortex.md for full protocol.
 ```
 
 ## How Agents Communicate
@@ -161,21 +161,21 @@ Summary: Implemented POST /webhooks/stripe with signature verification. Handles 
 
 ## Skills Reference
 
-### /setup-cortex
+### /setup
 
 First-time Cortex setup. Creates the team directory structure, writes `~/.cortex/config.yaml`, and registers the chief of staff.
 
-### /register-agent \<name\>
+### /register \<name\>
 
 Register a new agent. Creates an agent note in `<team_dir>/agents/` from the template. Asks for the agent's project path, role, and capabilities.
 
-### /join-cortex \<name\>
+### /join \<name\>
 
 Onboard an agent. Reads the agent note from the team directory, generates `.cortex.md` in the current project with the full protocol, and updates `CLAUDE.local.md`. Idempotent — safe to re-run as a sync.
 
 For the chief of staff, generates an extended protocol with coordinator duties (dispatch, monitoring, daily briefing/review).
 
-### /leave-cortex \<name\>
+### /leave \<name\>
 
 Offboard an agent. Removes `.cortex.md`, cleans `CLAUDE.local.md`, and sets agent status to inactive in the team directory.
 
@@ -228,10 +228,10 @@ cortex/
     plugin.json          — plugin metadata
     marketplace.json     — marketplace definition (required for installation)
   skills/
-    setup-cortex/        — first-time setup
-    join-cortex/         — agent onboarding
-    leave-cortex/        — agent offboarding
-    register-agent/      — agent registration
+    setup/        — first-time setup
+    join/         — agent onboarding
+    leave/        — agent offboarding
+    register/      — agent registration
   README.md
   LICENSE
 ```

@@ -6,10 +6,10 @@ An open protocol and Claude Code plugin for coordinating AI agent teams through 
 
 ```
 skills/                  — Claude Code skills (the plugin)
-  setup-cortex/          — first-time setup
-  join-cortex/           — agent onboarding (worker + coordinator .cortex.md)
-  leave-cortex/          — agent offboarding
-  register-agent/        — agent registration
+  setup/          — first-time setup
+  join/           — agent onboarding (worker + coordinator .cortex.md)
+  leave/          — agent offboarding
+  register/        — agent registration
 docs/
   protocol.md            — standalone protocol spec (runtime-agnostic)
   adapters/              — onboarding examples for Codex, Cursor, Gemini CLI, OpenCode
@@ -22,10 +22,10 @@ docs/
 
 ## Key Concepts
 
-- **Team directory** — a shared folder of markdown files where agents coordinate. Not part of this repo — created by /setup-cortex.
+- **Team directory** — a shared folder of markdown files where agents coordinate. Not part of this repo — created by /setup.
 - **Skills are prompts, not code** — each SKILL.md is instructions that Claude Code follows. No runtime, no build step.
 - **Protocol vs plugin** — `docs/protocol.md` is the universal spec. The skills are one implementation of it.
-- **Coordinator vs Worker .cortex.md** — `/join-cortex` generates different protocols based on whether the agent slug is `chief-of-staff` or not. Both templates live in `skills/join-cortex/SKILL.md`.
+- **Coordinator vs Worker .cortex.md** — `/join` generates different protocols based on whether the agent slug is `chief-of-staff` or not. Both templates live in `skills/join/SKILL.md`.
 
 ## Conventions
 
