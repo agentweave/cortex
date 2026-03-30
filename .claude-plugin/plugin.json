@@ -1,7 +1,7 @@
 {
   "name": "cortex",
   "description": "Coordinate a team of AI agents through a shared folder of markdown files",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "agentweave"
   },

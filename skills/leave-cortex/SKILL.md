@@ -1,6 +1,6 @@
 ---
 name: leave-cortex
-description: Leave the Cortex agent team — removes TEAM.md, cleans CLAUDE.md, sets agent status to inactive in team directory.
+description: Leave the Cortex agent team — removes .cortex.md, cleans CLAUDE.local.md, sets agent status to inactive in team directory.
 user_invocable: true
 argument-hint: <agent-name>
 ---
@@ -23,25 +23,25 @@ Derive the slug: lowercase, replace spaces with hyphens, strip any characters th
 
 ### 2. Check current state
 
-Check if `TEAM.md` exists in the current working directory.
-Check if `CLAUDE.md` contains "join-cortex".
+Check if `.cortex.md` exists in the current working directory.
+Check if `CLAUDE.local.md` contains "join-cortex".
 
 If neither exists, respond:
 > "This agent doesn't appear to be on the Cortex team. Nothing to clean up."
 
 Stop.
 
-### 3. Remove TEAM.md
+### 3. Remove .cortex.md
 
-If TEAM.md exists in the current working directory, delete it:
+If .cortex.md exists in the current working directory, delete it:
 
 ```bash
-rm TEAM.md
+rm .cortex.md
 ```
 
-### 4. Clean CLAUDE.md
+### 4. Clean CLAUDE.local.md
 
-If CLAUDE.md contains a `## Cortex` section (the line `## Cortex` through the next `##` heading or end of file), remove that entire section using the Edit tool.
+If CLAUDE.local.md contains a `## Cortex` section (the line `## Cortex` through the next `##` heading or end of file), remove that entire section using the Edit tool.
 
 ### 5. Cancel heartbeat cron
 
@@ -62,4 +62,4 @@ If the config or agent note doesn't exist, skip this step (already cleaned up or
 
 Respond:
 
-> "**{name}** has left Cortex. TEAM.md removed, CLAUDE.md cleaned, team directory status set to inactive."
+> "**{name}** has left Cortex. .cortex.md removed, CLAUDE.local.md cleaned, team directory status set to inactive."

@@ -252,7 +252,7 @@ To make an agent runtime work with Cortex:
 
 1. **Read the config** — Know where the team directory is
 2. **Read the agent note** — Know the agent's role, projects, and capabilities
-3. **Generate a protocol file** — A file in the agent's project that tells it how to operate (e.g., TEAM.md for Claude Code, .cursorrules for Cursor)
+3. **Generate a protocol file** — A file in the agent's project that tells it how to operate (e.g., `.cortex.md` for Claude Code, `.cursorrules` for Cursor)
 4. **Set up a heartbeat** — Periodic polling mechanism appropriate to the runtime
 5. **Follow the work queue contract** — Read `ready` tasks, mark `in-progress`, do work, mark `done`
 

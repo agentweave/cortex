@@ -1,13 +1,13 @@
 ---
 name: join-cortex
-description: Join the Cortex agent team — reads agent config from team directory, generates TEAM.md protocol, updates CLAUDE.md. Idempotent — safe to re-run as a sync.
+description: Join the Cortex agent team — reads agent config from team directory, generates .cortex.md protocol, updates CLAUDE.local.md. Idempotent — safe to re-run as a sync.
 user_invocable: true
 argument-hint: <agent-name>
 ---
 
 # /join-cortex — Join the Cortex Agent Team
 
-Onboard this agent to Cortex by reading its config from the team directory and generating the local protocol files.
+Onboard this agent to Cortex by reading its config from the team directory and generating the local protocol file.
 
 ## Arguments
 
@@ -46,33 +46,33 @@ From the frontmatter and body, extract:
 
 ### 5. Determine if this is a re-run
 
-Check if `TEAM.md` exists in the current working directory. If it does, this is a sync (re-run).
+Check if `.cortex.md` exists in the current working directory. If it does, this is a sync (re-run).
 
-### 6. Generate TEAM.md
+### 6. Generate .cortex.md
 
-Write `TEAM.md` in the current working directory.
+Write `.cortex.md` in the current working directory.
 
-If the agent slug is `chief-of-staff`, generate the **coordinator TEAM.md** (see Section A below).
+If the agent slug is `chief-of-staff`, generate the **coordinator .cortex.md** (see Section A below).
 
-Otherwise, generate the **worker TEAM.md** (see Section B below).
+Otherwise, generate the **worker .cortex.md** (see Section B below).
 
 Replace all `{placeholder}` values with the actual extracted values.
 
-### 7. Update CLAUDE.md
+### 7. Update CLAUDE.local.md
 
-Read the CLAUDE.md in the current working directory.
+Read the CLAUDE.local.md in the current working directory.
 
 If it exists and does NOT already contain the text "join-cortex":
 - Append this section at the very end:
 
 ```
 ## Cortex
-On session start, run /join-cortex <name> to sync with Cortex. See TEAM.md for full protocol.
+On session start, run /join-cortex <name> to sync with Cortex. See .cortex.md for full protocol.
 ```
 
-If CLAUDE.md doesn't exist, create it with just that content.
+If CLAUDE.local.md doesn't exist, create it with just that content.
 
-If CLAUDE.md already contains "join-cortex", do nothing (already configured).
+If CLAUDE.local.md already contains "join-cortex", do nothing (already configured).
 
 ### 8. Start heartbeat
 
@@ -83,7 +83,7 @@ Use CronCreate to start the heartbeat automatically. The cron fires every `{hear
 - prompt:
 
 ```
-Heartbeat: Poll for new work per TEAM.md protocol.
+Heartbeat: Poll for new work per .cortex.md protocol.
 
 1. Read agent note at {team_dir}/agents/{slug}.md
 2. Check for new tasks in linked project work queues — read each project note listed in ## Projects and check its ## Work Queue for tasks with status "ready"
@@ -101,7 +101,7 @@ Heartbeat: Poll for new work per TEAM.md protocol.
 - prompt:
 
 ```
-Heartbeat: Coordinator poll per TEAM.md protocol.
+Heartbeat: Coordinator poll per .cortex.md protocol.
 
 1. Check for user messages (via Telegram if configured)
 2. Read all agent notes in {team_dir}/agents/ — check last-heartbeat for staleness (> 30 min = likely down), check ## Session Log for blockers
@@ -112,19 +112,19 @@ Heartbeat: Coordinator poll per TEAM.md protocol.
 
 ### 9. Confirm
 
-If this was a first join (TEAM.md didn't exist before):
+If this was a first join (.cortex.md didn't exist before):
 
-> "Joined Cortex as **{name}**. TEAM.md generated, CLAUDE.md updated, heartbeat started (every {heartbeat_minutes} min)."
+> "Joined Cortex as **{name}**. .cortex.md generated, CLAUDE.local.md updated, heartbeat started (every {heartbeat_minutes} min)."
 
-If this was a re-run (TEAM.md already existed):
+If this was a re-run (.cortex.md already existed):
 
-> "Synced **{name}** with latest Cortex config. TEAM.md regenerated, heartbeat restarted."
+> "Synced **{name}** with latest Cortex config. .cortex.md regenerated, heartbeat restarted."
 
 ---
 
-## Section A: Coordinator TEAM.md (Chief of Staff)
+## Section A: Coordinator .cortex.md (Chief of Staff)
 
-Generate this TEAM.md when the agent slug is `chief-of-staff`:
+Generate this .cortex.md when the agent slug is `chief-of-staff`:
 
 ```
 # Cortex Protocol
@@ -199,9 +199,9 @@ You are **{name}**, the coordinator of Cortex — a team of AI agents.
 - Do NOT approve your own tasks — the user is the authority
 ```
 
-## Section B: Worker TEAM.md
+## Section B: Worker .cortex.md
 
-Generate this TEAM.md for all non-chief-of-staff agents:
+Generate this .cortex.md for all non-chief-of-staff agents:
 
 ```
 # Cortex Protocol

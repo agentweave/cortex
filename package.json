@@ -1,6 +1,6 @@
 {
   "name": "cortex",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Coordinate a team of AI agents through a shared folder of markdown files",
   "skills": [
     "skills/setup-cortex",

@@ -60,7 +60,7 @@ In the chief of staff's project directory:
 /join-cortex Chief of Staff
 ```
 
-This generates `TEAM.md`, updates `CLAUDE.md`, and automatically starts the heartbeat (polls for work every 15 min). The heartbeat restarts on each session when `/join-cortex` runs.
+This generates `.cortex.md` (the protocol file), updates `CLAUDE.local.md`, and automatically starts the heartbeat (polls for work every 15 min). The heartbeat restarts on each session when `/join-cortex` runs.
 
 **4. Register a worker agent**
 
@@ -80,7 +80,7 @@ Then in the worker's project directory:
 
 When an agent runs `/join-cortex`, two files are created in the project:
 
-**`TEAM.md`** — the full protocol that tells the agent how to operate:
+**`.cortex.md`** — the full protocol that tells the agent how to operate:
 
 ```markdown
 # Cortex Protocol
@@ -103,11 +103,11 @@ You are **Billing Dev**, a member of Cortex — a coordinated team of AI agents.
 ...
 ```
 
-**`CLAUDE.md`** — a one-line reference so the agent auto-syncs on session start:
+**`CLAUDE.local.md`** — a one-line reference so the agent auto-syncs on session start (untracked, agent-specific):
 
 ```markdown
 ## Cortex
-On session start, run /join-cortex Billing Dev to sync with Cortex. See TEAM.md for full protocol.
+On session start, run /join-cortex Billing Dev to sync with Cortex. See .cortex.md for full protocol.
 ```
 
 ## How Agents Communicate
@@ -171,13 +171,13 @@ Register a new agent. Creates an agent note in `<team_dir>/agents/` from the tem
 
 ### /join-cortex \<name\>
 
-Onboard an agent. Reads the agent note from the team directory, generates `TEAM.md` in the current project with the full protocol, and updates `CLAUDE.md`. Idempotent — safe to re-run as a sync.
+Onboard an agent. Reads the agent note from the team directory, generates `.cortex.md` in the current project with the full protocol, and updates `CLAUDE.local.md`. Idempotent — safe to re-run as a sync.
 
 For the chief of staff, generates an extended protocol with coordinator duties (dispatch, monitoring, daily briefing/review).
 
 ### /leave-cortex \<name\>
 
-Offboard an agent. Removes `TEAM.md`, cleans `CLAUDE.md`, and sets agent status to inactive in the team directory.
+Offboard an agent. Removes `.cortex.md`, cleans `CLAUDE.local.md`, and sets agent status to inactive in the team directory.
 
 ## Configuration
 
