@@ -32,11 +32,11 @@ docs/
 - Commit messages: `feat:`, `fix:`, `docs:`, `chore:` prefixes
 - Skills are self-contained — each SKILL.md includes all templates inline rather than referencing external files
 - Config lives at `~/.cortex/config.yaml`, not in the repo
-- .cortex.md, CLAUDE.local.md, and SESSION_LOG.md are gitignored — they're generated per-agent, not part of the plugin
+- .cortex.md and CLAUDE.local.md are gitignored — they're generated per-agent, not part of the plugin
 
 ## When Editing Skills
 
 - Skill files are markdown with YAML frontmatter (`name`, `description`, `user_invocable`, `argument-hint`)
 - Steps are numbered and sequential — renumber if you insert or remove steps
 - Templates (agent notes, .cortex.md) are embedded inline with `{placeholder}` syntax
-- After editing, sync the plugin cache: `rsync -av --exclude='.git' --exclude='.cortex.md' --exclude='SESSION_LOG.md' ~/Projects/cortex/ ~/.claude/plugins/cache/cortex-local/cortex/0.3.0/`
+- After editing, sync the plugin cache: `rsync -av --exclude='.git' --exclude='.cortex.md' ~/Projects/cortex/ ~/.claude/plugins/cache/cortex-local/cortex/0.3.0/`
