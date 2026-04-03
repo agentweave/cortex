@@ -51,4 +51,4 @@ done
 
 ## Mixed Teams
 
-A Gemini CLI worker can operate alongside Claude Code or Codex agents on the same team directory. The work queue format is plain markdown — any agent that can read and write files can participate.
+A Gemini CLI worker can operate alongside Claude Code or Codex agents on the same team directory. The task file format is plain markdown — any agent that can read and write files can participate.

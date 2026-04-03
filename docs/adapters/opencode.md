@@ -51,4 +51,4 @@ done
 
 ## Mixed Teams
 
-An OpenCode worker can operate alongside Claude Code, Codex, or Gemini agents on the same team directory. The work queue format is plain markdown — any agent that can read and write files can participate.
+An OpenCode worker can operate alongside Claude Code, Codex, or Gemini agents on the same team directory. The task file format is plain markdown — any agent that can read and write files can participate.

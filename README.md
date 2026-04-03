@@ -125,7 +125,7 @@ This means agents don't need to run simultaneously. A worker can pick up tasks h
 
 The team directory should be a git repo. During the daily review, the chief of staff prunes old data:
 
-- **Done tasks** older than 7 days are deleted from work queues
+- **Done tasks** older than 7 days are deleted from task files
 - **Session logs** are trimmed to only the latest entry per agent
 - **Git preserves history** — pruned content lives in `git log` if you ever need it
 
@@ -151,7 +151,7 @@ When a worker picks it up:
 ## Add Stripe webhook endpoint for payment failures
 
 **Status:** in-progress
-**Started:** 2026-03-28T10:15Z
+**Started:** 2026-03-28T10:15
 
 Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed events.
 ```
@@ -162,8 +162,8 @@ When complete:
 ## Add Stripe webhook endpoint for payment failures
 
 **Status:** done
-**Started:** 2026-03-28T10:15Z
-**Completed:** 2026-03-28T10:42Z
+**Started:** 2026-03-28T10:15
+**Completed:** 2026-03-28T10:42
 
 Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed events.
 
@@ -256,7 +256,7 @@ cortex/
 
 ## Other Runtimes
 
-Cortex is runtime-agnostic. The [protocol spec](docs/protocol.md) defines the team directory format, agent notes, work queues, and coordination rules. Any agent that can read and write files can participate.
+Cortex is runtime-agnostic. The [protocol spec](docs/protocol.md) defines the team directory format, agent notes, task files, and coordination rules. Any agent that can read and write files can participate.
 
 Adapter examples:
 - [Codex](docs/adapters/codex.md)

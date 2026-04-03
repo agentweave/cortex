@@ -104,7 +104,7 @@ status: active
 
 ## Task File
 
-Each agent has a task file at `agents/<slug>/tasks.md`. Tasks follow the Shuttle Protocol format:
+Each agent has a task file at `agents/<slug>/tasks.md`. Tasks follow the [Shuttle Protocol](https://github.com/agentweave/shuttle/blob/main/docs/PROTOCOL.md) format:
 
 ```markdown
 ## <title>
