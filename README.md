@@ -14,9 +14,9 @@ A **chief of staff** agent manages **worker agents** across projects. The chief 
 You --> Chief of Staff (Claude Code) --> Team Directory (markdown files) <-- Worker Agents (Claude Code)
 ```
 
-- **Team directory** — a shared folder of markdown files. Agent notes, project notes, and work queues. Can be an Obsidian vault, a git repo, or any directory.
-- **Chief of staff** — a coordinator agent that receives your instructions, dispatches tasks to workers, and sends daily briefings. Talk to it via Telegram (recommended), terminal, or remote control.
-- **Worker agents** — project-specific agents that poll for work, execute tasks, and report status.
+- **Team directory** — a shared folder of markdown files. Agent notes, project notes, and task files. Can be an Obsidian vault, a git repo, or any directory.
+- **Chief of staff** — a coordinator agent that receives your instructions, dispatches tasks to agent task files, and sends daily briefings. Talk to it via Telegram (recommended), terminal, or remote control.
+- **Worker agents** — project-specific agents that poll their task file for work, execute tasks, and report status.
 - **No direct agent-to-agent communication.** All coordination happens through the shared markdown files.
 
 ## Quick Start
@@ -88,15 +88,15 @@ When an agent runs `/join`, two files are created in the project:
 You are **Billing Dev**, a member of Cortex — a coordinated team of AI agents.
 
 ## Your Identity
-- Agent note: agents/billing-dev.md in the team directory
+- Agent note: agents/billing-dev/billing-dev.md in the team directory
+- Task file: agents/billing-dev/tasks.md
 - Project: ~/Projects/billing-service
 - Team directory: ~/cortex-team
 
 ## Protocol
 ### Checking for Work
-- Read your project's ## Work Queue
-- Pick up tasks with status "ready"
-- Mark "in-progress", do the work, mark "done"
+- Read your task file for tasks with **Status:** ready
+- Mark in-progress with **Started:** timestamp, do the work, mark done with **Completed:** timestamp
 
 ### Heartbeat
 - Poll every 15 minutes for new work
@@ -114,9 +114,9 @@ On session start, run /join Billing Dev to sync with Cortex. See .cortex.md for 
 
 Agents never talk to each other directly. All coordination flows through the team directory — a shared folder of markdown files that acts as a message bus.
 
-- **Chief of staff writes tasks** to project notes' `## Work Queue` sections
-- **Workers poll** their project's work queue on a heartbeat, pick up `ready` tasks, and report `done`
-- **Heartbeat timestamps** — every agent updates a `last-heartbeat` field in its agent note on each poll. The chief of staff checks these to detect agents that have gone down (> 30 min stale)
+- **Chief of staff writes tasks** to agent task files (`agents/<slug>/tasks.md`)
+- **Workers poll** their task file on a heartbeat, pick up `ready` tasks, and report `done`
+- **Liveness timestamps** — agents update `<!-- cortex:last-tick -->` in their task file. Chief detects stale agents with active tasks as likely down.
 - **Status flows back** through agent notes' `## Session Log` — the chief of staff reads these to monitor progress
 
 This means agents don't need to run simultaneously. A worker can pick up tasks hours after the chief of staff wrote them.
@@ -129,34 +129,46 @@ The team directory should be a git repo. During the daily review, the chief of s
 - **Session logs** are trimmed to only the latest entry per agent
 - **Git preserves history** — pruned content lives in `git log` if you ever need it
 
-## Work Queue
+## Task Files
 
-Tasks live in project notes under `## Work Queue`. The chief of staff writes them, workers execute them.
+Each agent has a task file at `agents/<slug>/tasks.md`. The format follows the [Shuttle Protocol](https://github.com/agentweave/shuttle/blob/main/docs/PROTOCOL.md).
 
 **Status lifecycle:** `ready` → `in-progress` → `done`
 
-Example:
+A ready task:
 
 ```markdown
-## Work Queue
+## Add Stripe webhook endpoint for payment failures
 
-### 2026-03-28T10:00
-**Task:** Add Stripe webhook endpoint for payment failures
-**Scope:** Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed events
 **Status:** ready
+
+Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed events.
 ```
 
 When a worker picks it up:
 
 ```markdown
+## Add Stripe webhook endpoint for payment failures
+
 **Status:** in-progress
+**Started:** 2026-03-28T10:15Z
+
+Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed events.
 ```
 
 When complete:
 
 ```markdown
+## Add Stripe webhook endpoint for payment failures
+
 **Status:** done
-Summary: Implemented POST /webhooks/stripe with signature verification. Handles payment_intent.payment_failed by updating subscription status to past_due. Added tests.
+**Started:** 2026-03-28T10:15Z
+**Completed:** 2026-03-28T10:42Z
+
+Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed events.
+
+### Summary
+Implemented POST /webhooks/stripe with signature verification. Handles payment_intent.payment_failed by updating subscription status to past_due. Added tests.
 ```
 
 ## Skills Reference
@@ -167,7 +179,7 @@ First-time Cortex setup. Creates the team directory structure, writes `~/.cortex
 
 ### /register \<name\>
 
-Register a new agent. Creates an agent note in `<team_dir>/agents/` from the template. Asks for the agent's project path, role, and capabilities.
+Register a new agent. Creates an agent subfolder in `<team_dir>/agents/<slug>/` with the agent note and an empty task file. Asks for the agent's project path, role, and capabilities.
 
 ### /join \<name\>
 
@@ -199,9 +211,15 @@ Telegram is handled by the separate [Claude Code Telegram plugin](https://docs.a
 ```
 ~/cortex-team/
   agents/
-    chief-of-staff.md
-    billing-dev.md
-    dashboard-dev.md
+    chief-of-staff/
+      chief-of-staff.md
+      tasks.md
+    billing-dev/
+      billing-dev.md
+      tasks.md
+    dashboard-dev/
+      dashboard-dev.md
+      tasks.md
   projects/
     billing-service.md
     dashboard.md
@@ -214,11 +232,11 @@ Telegram is handled by the separate [Claude Code Telegram plugin](https://docs.a
 
 Agent names are converted to slugs for file naming: lowercase, spaces replaced with hyphens, special characters stripped.
 
-| Name | Slug | File |
-|------|------|------|
-| Billing Dev | billing-dev | `agents/billing-dev.md` |
-| Chief of Staff | chief-of-staff | `agents/chief-of-staff.md` |
-| Dashboard Dev | dashboard-dev | `agents/dashboard-dev.md` |
+| Name | Slug | Files |
+|------|------|-------|
+| Billing Dev | billing-dev | `agents/billing-dev/billing-dev.md` + `tasks.md` |
+| Chief of Staff | chief-of-staff | `agents/chief-of-staff/chief-of-staff.md` + `tasks.md` |
+| Dashboard Dev | dashboard-dev | `agents/dashboard-dev/dashboard-dev.md` + `tasks.md` |
 
 ## Plugin Structure
 
