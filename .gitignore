@@ -6,6 +6,9 @@
 .cortex.md
 CLAUDE.local.md
 
+# Internal assets (promotional, not part of the plugin)
+assets/internal/
+
 # Claude Code session files
 .claude/
 .playwright-mcp/
