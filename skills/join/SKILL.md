@@ -30,7 +30,7 @@ Derive the slug: lowercase, replace spaces with hyphens, strip any characters th
 
 ### 3. Read agent note
 
-Read `<team_dir>/agents/<slug>.md`.
+Read `<team_dir>/agents/<slug>/<slug>.md`.
 
 If the file doesn't exist, stop and respond:
 > "Agent `<name>` is not registered in Cortex. Run `/register <name>` to create the agent note first."
@@ -76,39 +76,103 @@ If CLAUDE.local.md already contains "## Cortex", do nothing (already configured)
 
 ### 8. Start heartbeat
 
-Use CronCreate to start the heartbeat automatically. The cron fires every `{heartbeat_minutes}` minutes.
+**8a. Clean up existing cron (idempotency)**
 
-**For worker agents** (slug is NOT `chief-of-staff`), create a cron with:
+Use CronList to check for any cron whose prompt starts with `Cortex `. If found, use CronDelete to remove it.
+
+**8b. Collision detection**
+
+Read `<team_dir>/agents/<slug>/tasks.md`. Look for a comment matching:
+```
+<!-- cortex:last-tick YYYY-MM-DDTHH:MM -->
+```
+
+If found, parse the timestamp. If the timestamp is less than `{heartbeat_minutes}` minutes ago, ask the user:
+
+> "A Cortex heartbeat was active X minutes ago (possibly in another session). Start anyway?"
+
+If the user says no, skip to Step 9 (confirm) without starting the heartbeat. If yes (or no timestamp found), continue.
+
+**8c. Create the heartbeat cron**
+
+Convert the interval to a cron expression: `{heartbeat_minutes}` becomes `*/{heartbeat_minutes} * * * *`.
+
+**For worker agents** (slug is NOT `chief-of-staff`), use CronCreate with:
 - cron: `*/{heartbeat_minutes} * * * *`
 - prompt:
 
 ```
-Heartbeat: Poll for new work per .cortex.md protocol.
+Cortex tick: read {team_dir}/agents/{slug}/tasks.md and continue working.
 
-1. Read agent note at {team_dir}/agents/{slug}.md
-2. Check for new tasks in linked project work queues — read each project note listed in ## Projects and check its ## Work Queue for tasks with status "ready"
-3. If any tasks have status "ready":
-   - Mark them "in-progress" (edit the file)
-   - Do the work
-   - Mark them "done" and append a summary
-   - Update agent note Session Log
-4. Update last-heartbeat in agent note frontmatter to current ISO timestamp (YYYY-MM-DDTHH:MM)
-5. If no new work, just update last-heartbeat (silent heartbeat)
+1. Read {team_dir}/agents/{slug}/tasks.md
+2. If a task is in-progress, continue it (you may be resuming from a previous session — read progress notes carefully)
+3. If no task is in-progress, pick the first ready task, mark it in-progress with **Started:** timestamp
+4. Do the work
+5. Update progress in tasks.md as you go
+6. When complete, mark done with **Completed:** timestamp and ### Summary
+7. If more ready tasks remain, pick up the next one
+8. Update the last-tick timestamp: <!-- cortex:last-tick YYYY-MM-DDTHH:MM -->
 ```
 
-**For chief of staff** (slug IS `chief-of-staff`), create a cron with:
+**For chief of staff** (slug IS `chief-of-staff`), use CronCreate with:
 - cron: `*/{heartbeat_minutes} * * * *`
 - prompt:
 
 ```
-Heartbeat: Coordinator poll per .cortex.md protocol.
+Cortex custom: Coordinator poll per .cortex.md protocol.
 
 1. Check for user messages (via Telegram if configured)
-2. Read all agent notes in {team_dir}/agents/ — check last-heartbeat for staleness (> 30 min = likely down), check ## Session Log for blockers
-3. Read all project notes in {team_dir}/projects/ — check ## Work Queue for status updates
+2. Read all agent task files in {team_dir}/agents/*/tasks.md:
+   - Parse cortex:last-tick for staleness (> 30 min AND has active tasks = likely down)
+   - Check task statuses for progress updates
+3. Read all project notes in {team_dir}/projects/ for context
 4. Flag any issues to the user
-5. Update last-heartbeat in {team_dir}/agents/chief-of-staff.md frontmatter to current ISO timestamp (YYYY-MM-DDTHH:MM)
+5. Update <!-- cortex:last-tick YYYY-MM-DDTHH:MM --> in {team_dir}/agents/chief-of-staff/tasks.md
 ```
+
+**8d. Install idle suppression hook (workers only)**
+
+Skip this step if the agent slug is `chief-of-staff`.
+
+Create the `.claude/hooks/` directory if it doesn't exist. Write the following script to `.claude/hooks/cortex-precheck.sh`:
+
+```bash
+#!/bin/bash
+# Cortex idle suppression pre-check
+# Blocks Cortex tick prompts when no active tasks exist.
+# Installed by /cortex:join, removed by /cortex:leave.
+
+TASK_FILE="{team_dir}/agents/{slug}/tasks.md"
+
+if grep -q '^\*\*Status:\*\* \(ready\|in-progress\)' "$TASK_FILE" 2>/dev/null; then
+  exit 0
+else
+  echo '{"decision":"block","reason":"No active tasks"}' >&2
+  exit 2
+fi
+```
+
+Replace `{team_dir}` and `{slug}` with the actual resolved values.
+
+Make the script executable using Bash: `chmod +x .claude/hooks/cortex-precheck.sh`.
+
+Read `.claude/settings.json` in the current project directory. If it doesn't exist, create it. If it exists, parse the existing JSON.
+
+If the `hooks.UserPromptSubmit` array does NOT already contain an entry with `"matcher": "Cortex tick:"`, add the following entry to the array:
+
+```json
+{
+  "matcher": "Cortex tick:",
+  "hooks": [
+    {
+      "type": "command",
+      "command": ".claude/hooks/cortex-precheck.sh"
+    }
+  ]
+}
+```
+
+Preserve all existing hook entries. If `hooks` or `hooks.UserPromptSubmit` keys don't exist, create them.
 
 ### 9. Confirm
 
@@ -132,7 +196,8 @@ Generate this .cortex.md when the agent slug is `chief-of-staff`:
 You are **{name}**, the coordinator of Cortex — a team of AI agents.
 
 ## Your Identity
-- Agent note: agents/{slug}.md in the team directory
+- Agent note: agents/{slug}/{slug}.md in the team directory
+- Task file: agents/{slug}/tasks.md
 - Project: {project}
 - Team directory: {team_dir}
 
@@ -147,22 +212,24 @@ You are **{name}**, the coordinator of Cortex — a team of AI agents.
 
 ### Coordinator Duties
 2. Check for user messages (via Telegram if configured, or wait for terminal/remote control input)
-3. Read all agent notes in agents/ — check `last-heartbeat` frontmatter field. If more than 30 minutes ago, the agent is likely down — flag to user. Also check ## Session Log for blockers
-4. Read all project notes in projects/ — check ## Work Queue for status updates
+3. Read all agent task files in agents/*/tasks.md:
+   - Parse `<!-- cortex:last-tick -->` for staleness. If > 30 min AND agent has active tasks (`**Status:** ready` or `in-progress`), flag as likely down. If stale with no active tasks, agent is idle (normal).
+   - Check task statuses for progress updates
+4. Read all project notes in projects/ for context
 5. Flag any issues to the user
 
 ### Dispatching Work
-6. To assign work, write a task entry to the relevant project note's ## Work Queue:
+6. To assign work, write a task entry to the relevant agent's task file (`agents/<slug>/tasks.md`):
 
-   ### <ISO timestamp>
-   **Task:** Short title
-   **Scope:** Detailed description of what to do
+   ## <descriptive title>
    **Status:** ready
+
+   <description of what to do>
 
 7. The assigned agent will pick up the task on its next heartbeat
 
 ### Registering New Agents
-8. Run /register <name> to create a new agent note
+8. Run /register <name> to create a new agent note and task file
 9. Tell the user to run /join <name> in the agent's project directory
 
 ### Daily Briefing ({daily_briefing})
@@ -175,21 +242,22 @@ You are **{name}**, the coordinator of Cortex — a team of AI agents.
 14. Send to the user (via Telegram if configured, otherwise output in session)
 
 ### Housekeeping (during daily review)
-15. Prune completed work: delete tasks with status "done" that are older than 7 days from all project notes' ## Work Queue sections
+15. Prune completed tasks: delete tasks with status "done" that are older than 7 days (by **Completed:** timestamp) from all agent task files
 16. Trim agent session logs: keep only the most recent entry in each agent note's ## Session Log — delete older entries
 17. Commit the cleanup: `git add -A && git commit -m "chore: prune completed tasks and old session logs"` in the team directory
 
 ### Heartbeat
 18. Poll the team directory every {heartbeat_minutes} minutes for:
     - New user messages (via Telegram if configured)
-    - Agent `last-heartbeat` timestamps that are > 30 min old (agent likely down)
+    - Agent liveness — read `<!-- cortex:last-tick -->` from each agent's tasks.md
     - Blocked agents (check for blockers in agent notes)
-19. On every heartbeat poll, update your own `last-heartbeat` in agents/chief-of-staff.md frontmatter to current ISO timestamp (YYYY-MM-DDTHH:MM)
+19. On every heartbeat poll, update `<!-- cortex:last-tick YYYY-MM-DDTHH:MM -->` in agents/chief-of-staff/tasks.md
 
 ### Reporting Back
-20. After each session, update your agent note (agents/{slug}.md ## Session Log) with:
+20. After each session, update your agent note (agents/{slug}/{slug}.md ## Session Log) with:
     - Last session date
     - Current state and any blockers
+
 ## Communication
 - The user communicates with you via Telegram (if configured), terminal, or remote control
 - You coordinate agents by writing to the team directory — never by communicating directly with agents
@@ -207,7 +275,8 @@ Generate this .cortex.md for all non-chief-of-staff agents:
 You are **{name}**, a member of Cortex — a coordinated team of AI agents.
 
 ## Your Identity
-- Agent note: agents/{slug}.md in the team directory
+- Agent note: agents/{slug}/{slug}.md in the team directory
+- Task file: agents/{slug}/tasks.md
 - Project: {project}
 - Team directory: {team_dir}
 
@@ -221,21 +290,22 @@ You are **{name}**, a member of Cortex — a coordinated team of AI agents.
 1. Run /join {name} to sync with latest config
 
 ### Checking for Work
-2. Read your agent note to find your linked projects
-3. For each project, read the project note's ## Work Queue in the team directory
-4. Pick up tasks with status "ready":
-   - Edit the task status to "in-progress" in the project note
+2. Read your task file at {team_dir}/agents/{slug}/tasks.md
+3. Pick up tasks with **Status:** ready:
+   - Edit the status to `in-progress` and add `**Started:** YYYY-MM-DDTHH:MM`
    - Do the work
-   - Edit the task status to "done"
-   - Append a summary of what was done below the task
+   - Edit the status to `done` and add `**Completed:** YYYY-MM-DDTHH:MM`
+   - Append a `### Summary` section with what was done
 
 ### Reporting Back
-5. After completing work, update two places:
-   a. **Project note** (## Work Queue) — task status and completion summary
-   b. **Agent note** (agents/{slug}.md ## Session Log) — last session date, current state, blockers
+4. After completing work, update your agent note (agents/{slug}/{slug}.md ## Session Log) with:
+   - Last session date
+   - Current state and any blockers
+
 ### Heartbeat
-7. Poll the team directory every {heartbeat_minutes} minutes for new work in your project's work queue
-8. On every heartbeat poll (even if no new work), update your agent note frontmatter: set `last-heartbeat` to the current ISO timestamp (YYYY-MM-DDTHH:MM) using the Edit tool on `{team_dir}/agents/{slug}.md`
+5. Poll your task file every {heartbeat_minutes} minutes for new work
+6. On every active heartbeat tick, update `<!-- cortex:last-tick YYYY-MM-DDTHH:MM -->` at the end of your task file
+7. When no tasks are active, your heartbeat tick is suppressed (no model invocation, no token cost)
 
 ## Communication
 - The chief of staff monitors your work via the team directory
