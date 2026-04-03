@@ -1,16 +1,10 @@
 {
-  "name": "agentweave",
-  "owner": {
-    "name": "agentweave"
-  },
-  "description": "Open source tools for AI agent coordination",
+  "name": "cortex",
   "plugins": [
     {
       "name": "cortex",
       "description": "Coordinate a team of AI agents through a shared folder of markdown files",
-      "author": {
-        "name": "agentweave"
-      },
+      "author": { "name": "agentweave" },
       "source": "./",
       "category": "development"
     }
