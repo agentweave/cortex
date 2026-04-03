@@ -38,4 +38,4 @@ docs/
 - Skill files are markdown with YAML frontmatter (`name`, `description`, `user_invocable`, `argument-hint`)
 - Steps are numbered and sequential — renumber if you insert or remove steps
 - Templates (agent notes, .cortex.md) are embedded inline with `{placeholder}` syntax
-- After editing, sync the plugin cache: `rsync -av --exclude='.git' --exclude='.cortex.md' ~/Projects/cortex/ ~/.claude/plugins/cache/cortex-local/cortex/0.4.0/`
+- After editing, reinstall the plugin to pick up changes: `claude plugins install cortex@agentweave --scope user`

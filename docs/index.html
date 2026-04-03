@@ -8,7 +8,7 @@
 <meta name="description" content="Coordinate a team of AI agents through a shared folder of markdown files. Open protocol, any runtime.">
 <meta property="og:title" content="Cortex — Give your agents a chief of staff">
 <meta property="og:description" content="Coordinate a team of AI agents through a shared folder of markdown files. Open protocol, any runtime.">
-<meta property="og:image" content="https://raw.githubusercontent.com/agentweave/cortex/main/poster.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/agentweave/cortex/main/assets/cortex-logo.svg">
 <meta property="og:url" content="https://agentweave.github.io/cortex">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -316,7 +316,7 @@
     font-weight: 500;
   }
 
-  /* Work Queue */
+  /* Task File */
   .wq-demo {
     max-width: 700px;
     margin: 0 auto;
@@ -558,30 +558,30 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff6ec7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
         </div>
         <h3>Team Directory</h3>
-        <p>A shared folder of markdown files that acts as the message bus. Agent notes, project notes, and work queues. No direct agent-to-agent communication.</p>
+        <p>A shared folder of markdown files that acts as the message bus. Agent notes, project notes, and task files. No direct agent-to-agent communication.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Work Queue -->
+<!-- Task File -->
 <div class="container">
   <div class="section">
     <div class="section-header">
-      <h2>The work queue</h2>
+      <h2>The task file</h2>
       <p>Tasks flow through plain markdown. Chief of staff writes them, workers execute them.</p>
     </div>
     <div class="wq-demo">
-      <span class="heading">## Work Queue</span><br><br>
-      <span class="heading">### 2026-03-28T10:00</span><br>
-      <span class="field">**Task:**</span> <span class="value">Add Stripe webhook endpoint</span><br>
-      <span class="field">**Scope:**</span> <span class="value">Create POST /webhooks/stripe, verify signature</span><br>
-      <span class="field">**Status:**</span> <span class="status-ready">ready</span>
+      <span class="heading">## Add Stripe webhook endpoint</span><br>
+      <span class="field">**Status:**</span> <span class="status-ready">ready</span><br><br>
+      <span class="value">Create POST /webhooks/stripe, verify signature.</span>
       <span class="arrow">&darr;</span>
-      <span class="field">**Status:**</span> <span class="status-progress">in-progress</span>
+      <span class="field">**Status:**</span> <span class="status-progress">in-progress</span><br>
+      <span class="field">**Started:**</span> <span class="value">2026-03-28T14:00</span>
       <span class="arrow">&darr;</span>
       <span class="field">**Status:**</span> <span class="status-done">done</span><br>
-      <span class="value">Summary: Implemented webhook with signature verification. Added tests.</span>
+      <span class="field">**Completed:**</span> <span class="value">2026-03-28T15:30</span><br>
+      <span class="value">### Summary — Implemented webhook with signature verification. Added tests.</span>
     </div>
   </div>
 </div>
