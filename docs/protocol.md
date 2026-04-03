@@ -160,6 +160,27 @@ Workers skip tick updates when they have no active tasks (no `ready` or `in-prog
 - **Stale tick + active tasks** = agent is likely **down** (flag for attention)
 - **Stale tick + no active tasks** = agent is **idle** (normal, no action needed)
 
+### External Task Runners
+
+When an agent uses an external task runner (e.g., [Shuttle](https://github.com/agentweave/shuttle)) for granular task execution, the Cortex task file acts as a monitoring wrapper rather than the execution layer.
+
+**Pattern:**
+
+1. The user starts a task list in the external runner (e.g., `/shuttle:kickoff` creates `.shuttle.md` in the agent's project)
+2. The coordinator writes a single Cortex task to the agent's task file: "Execute Shuttle tasks — report status"
+3. The **external runner's heartbeat** does the actual work (picks up items, executes, marks done)
+4. The **Cortex heartbeat** reads the external task file and updates progress in the Cortex task
+5. When all external tasks are complete, the Cortex heartbeat marks the Cortex task as done
+
+**Key principles:**
+
+- The external runner has no knowledge of Cortex — it runs independently
+- Cortex does not duplicate execution — the Cortex tick reports, the external tick works
+- The coordinator sees one task per agent, not every granular item
+- Both heartbeats run concurrently with different concerns: execution vs. coordination
+
+This pattern applies to any task runner that manages its own file — Cortex wraps it for team-level visibility.
+
 ## Slug Derivation
 
 Names are converted to slugs for file and folder naming: lowercase, spaces replaced with hyphens, special characters stripped.
