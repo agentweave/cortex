@@ -30,10 +30,10 @@ Derive the slug: lowercase, replace spaces with hyphens, strip any characters th
 
 ### 3. Check for existing agent
 
-Check if `<team_dir>/agents/<slug>.md` already exists.
+Check if `<team_dir>/agents/<slug>/<slug>.md` already exists.
 
 If it does, stop and respond:
-> "Agent `<name>` is already registered at `agents/<slug>.md`."
+> "Agent `<name>` is already registered at `agents/<slug>/<slug>.md`."
 
 ### 4. Gather agent details
 
@@ -55,7 +55,6 @@ name: ""
 project: ""
 status: active
 joined: ""
-last-heartbeat: ""
 ---
 
 ## Role
@@ -72,9 +71,11 @@ Last session: --
 Status: registered
 ```
 
-### 6. Create agent note
+### 6. Create agent files
 
-Write `<team_dir>/agents/<slug>.md` with the template filled in:
+Create subfolder: `mkdir -p <team_dir>/agents/<slug>`
+
+Write `<team_dir>/agents/<slug>/<slug>.md` with the template filled in:
 
 - `name`: the display name
 - `project`: the project directory path
@@ -85,13 +86,16 @@ Write `<team_dir>/agents/<slug>.md` with the template filled in:
 - `## Capabilities`: the capabilities list (as bullet points, one per line)
 - `## Session Log`: initialized with "Last session: --" and "Status: registered"
 
+Write `<team_dir>/agents/<slug>/tasks.md` as an empty file.
+
 ### 7. Confirm
 
 Respond:
 
 > "Registered **<name>** in Cortex.
 >
-> Agent note: `<team_dir>/agents/<slug>.md`
+> Agent note: `<team_dir>/agents/<slug>/<slug>.md`
+> Task file: `<team_dir>/agents/<slug>/tasks.md`
 >
 > **Next step:** In the agent's project directory (`<project_path>`), run:
 > ```
