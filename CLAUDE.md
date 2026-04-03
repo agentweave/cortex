@@ -13,8 +13,7 @@ skills/                  — Claude Code skills (the plugin)
 docs/
   protocol.md            — standalone protocol spec (runtime-agnostic)
   adapters/              — onboarding examples for Codex, Cursor, Gemini CLI, OpenCode
-  specs/                 — design spec
-  plans/                 — implementation plan
+  internal/              — specs and plans (gitignored)
 .claude-plugin/
   plugin.json            — plugin metadata
   marketplace.json       — marketplace definition for installation
