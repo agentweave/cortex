@@ -43,15 +43,23 @@ rm .cortex.md
 
 If CLAUDE.local.md contains a `## Cortex` section (the line `## Cortex` through the next `##` heading or end of file), remove that entire section using the Edit tool.
 
-### 5. Cancel heartbeat cron
+### 5. Cancel heartbeat and clean up hooks
 
-Use CronList to find any active Cortex heartbeat cron (look for jobs with "Heartbeat" in the prompt). If found, cancel it with CronDelete. If no cron is found, skip — the agent may not have had a heartbeat running.
+**5a.** Use CronList to find any active cron whose prompt starts with `Cortex ` (with trailing space). If found, cancel each with CronDelete. If no cron is found, skip — the agent may not have had a heartbeat running.
+
+**5b.** If `.claude/hooks/cortex-precheck.sh` exists, delete it:
+
+```bash
+rm -f .claude/hooks/cortex-precheck.sh
+```
+
+**5c.** Read `.claude/settings.json`. If it contains a hook entry with `"matcher": "Cortex tick:"` in the `hooks.UserPromptSubmit` array, remove that entry. Preserve all other hook entries. Write the updated JSON back.
 
 ### 6. Update agent note in team directory
 
 Read `~/.cortex/config.yaml` to get `team_dir`.
 
-If config exists and `<team_dir>/agents/<slug>.md` exists, read the agent note and check the current `status` field:
+If config exists and `<team_dir>/agents/<slug>/<slug>.md` exists, read the agent note and check the current `status` field:
 
 - If `status: active`, replace with `status: inactive` using the Edit tool.
 - If `status: inactive` (already inactive), skip — no change needed.
