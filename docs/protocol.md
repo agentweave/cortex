@@ -11,9 +11,15 @@ A shared folder (the "team directory") contains all coordination state:
 ```
 <team_dir>/
   agents/
-    chief-of-staff.md
-    billing-dev.md
-    dashboard-dev.md
+    chief-of-staff/
+      chief-of-staff.md
+      tasks.md
+    billing-dev/
+      billing-dev.md
+      tasks.md
+    dashboard-dev/
+      dashboard-dev.md
+      tasks.md
   projects/
     billing-service.md
     dashboard.md
@@ -26,7 +32,7 @@ The team directory can be any folder — a git repo, an Obsidian vault, a Dropbo
 
 ## Agent Notes
 
-Each agent has a markdown file at `agents/<slug>.md`.
+Each agent has a markdown file at `agents/<slug>/<slug>.md`.
 
 ### Frontmatter (YAML)
 
@@ -36,7 +42,6 @@ name: Billing Dev
 project: ~/Projects/billing-service
 status: active
 joined: 2026-03-28
-last-heartbeat: "2026-03-28T14:30"
 ---
 ```
 
@@ -46,7 +51,6 @@ last-heartbeat: "2026-03-28T14:30"
 | `project` | string | Absolute path to the agent's working directory |
 | `status` | `active` \| `inactive` | Whether the agent is on the team |
 | `joined` | date | Date registered (YYYY-MM-DD) |
-| `last-heartbeat` | ISO timestamp | Last time the agent polled for work (YYYY-MM-DDTHH:MM) |
 
 ### Body Sections
 
@@ -96,24 +100,19 @@ status: active
 ## Notes
 - Agent: billing-dev at ~/Projects/billing-service
 - Stack: Python, FastAPI, PostgreSQL
-
-## Work Queue
-
-### 2026-03-28T10:00
-**Task:** Add Stripe webhook endpoint
-**Scope:** Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed
-**Status:** ready
 ```
 
-## Work Queue Format
+## Task File
 
-Tasks live under `## Work Queue` in project notes. Each task entry:
+Each agent has a task file at `agents/<slug>/tasks.md`. Tasks follow the Shuttle Protocol format:
 
 ```markdown
-### <ISO timestamp>
-**Task:** Short title
-**Scope:** Detailed description of what to do
-**Status:** ready | in-progress | done
+## <title>
+**Status:** <status>
+**Started:** <timestamp>
+**Completed:** <timestamp>
+
+<body>
 ```
 
 ### Status Lifecycle
@@ -122,28 +121,54 @@ Tasks live under `## Work Queue` in project notes. Each task entry:
 ready --> in-progress --> done
 ```
 
-- **ready** — Written by the chief of staff. Available for pickup.
-- **in-progress** — Claimed by a worker. The worker edits the status field.
-- **done** — Completed. The worker appends a summary below the status line.
+- **ready** — Written by the chief of staff. Available for pickup. No Started/Completed timestamps yet.
+- **in-progress** — Claimed by the worker. The worker adds `**Started:** YYYY-MM-DDTHH:MM`.
+- **done** — Completed. The worker sets `**Completed:** YYYY-MM-DDTHH:MM` and appends a `### Summary`.
+
+Tasks are picked up in document order (first `ready` task in the file wins).
 
 ### Completion Format
 
 When a worker finishes a task:
 
 ```markdown
+## Add Stripe webhook endpoint
 **Status:** done
-Summary: Implemented POST /webhooks/stripe with signature verification. Added tests.
+**Started:** 2026-03-28T10:15
+**Completed:** 2026-03-28T11:42
+
+Create POST /webhooks/stripe, verify signature, handle payment_intent.payment_failed
+
+### Summary
+Implemented POST /webhooks/stripe with signature verification. Added tests.
 ```
+
+### Liveness
+
+Each task file ends with a liveness timestamp:
+
+```markdown
+<!-- cortex:last-tick YYYY-MM-DDTHH:MM -->
+```
+
+Agents update this comment on every poll cycle.
+
+### Idle Suppression
+
+Workers skip tick updates when they have no active tasks (no `ready` or `in-progress` entries in their task file). The coordinator uses context-aware staleness detection:
+
+- **Stale tick + active tasks** = agent is likely **down** (flag for attention)
+- **Stale tick + no active tasks** = agent is **idle** (normal, no action needed)
 
 ## Slug Derivation
 
-Names are converted to slugs for file naming: lowercase, spaces replaced with hyphens, special characters stripped.
+Names are converted to slugs for file and folder naming: lowercase, spaces replaced with hyphens, special characters stripped.
 
-| Name | Slug |
-|------|------|
-| Billing Dev | billing-dev |
-| Chief of Staff | chief-of-staff |
-| Dashboard Dev | dashboard-dev |
+| Name | Slug | Agent Note | Task File |
+|------|------|------------|-----------|
+| Billing Dev | billing-dev | `agents/billing-dev/billing-dev.md` | `agents/billing-dev/tasks.md` |
+| Chief of Staff | chief-of-staff | `agents/chief-of-staff/chief-of-staff.md` | `agents/chief-of-staff/tasks.md` |
+| Dashboard Dev | dashboard-dev | `agents/dashboard-dev/dashboard-dev.md` | `agents/dashboard-dev/tasks.md` |
 
 ## Agent Roles
 
@@ -152,30 +177,30 @@ Names are converted to slugs for file naming: lowercase, spaces replaced with hy
 A worker agent is responsible for one or more projects. Its protocol:
 
 1. **Session start** — Read its agent note, sync with latest config
-2. **Check for work** — Read linked project notes' `## Work Queue`, look for `ready` tasks
-3. **Execute** — Mark task `in-progress`, do the work, mark `done` with summary
-4. **Report** — Update project note (work queue) and agent note (session log)
-5. **Heartbeat** — Poll every N minutes. Update `last-heartbeat` on every poll, even if no new work.
+2. **Check for work** — Read `agents/<slug>/tasks.md`, look for the first `ready` task
+3. **Execute** — Mark task `in-progress` with `**Started:**` timestamp, do the work, mark `done` with `**Completed:**` timestamp and `### Summary`
+4. **Report** — Update agent note (session log)
+5. **Heartbeat** — Update `<!-- cortex:last-tick -->` in task file on every poll. Idle ticks suppressed when no active tasks.
 
 ### Coordinator (Chief of Staff)
 
 The coordinator manages the team. Its protocol:
 
-1. **Session start** — Read all agent notes and project notes
+1. **Session start** — Read all agent notes, task files, and project notes
 2. **Receive instructions** — From the user via any channel (Telegram, terminal, etc.)
-3. **Dispatch work** — Write tasks to project notes' `## Work Queue` with status `ready`
-4. **Monitor agents** — Check `last-heartbeat` timestamps. If > 30 minutes stale, flag as likely down.
-5. **Register agents** — Create new agent notes from template
+3. **Dispatch work** — Write tasks to `agents/<slug>/tasks.md` with status `ready`
+4. **Monitor agents** — Read `<!-- cortex:last-tick -->` from each agent's task file. Context-aware staleness: stale + active tasks = likely down, stale + no active tasks = idle (normal).
+5. **Register agents** — Create agent subfolders (`agents/<slug>/`) with agent note and task file
 6. **Daily briefing** — Scan all agents and projects, summarize status, send to user
 7. **Daily review** — Summarize what got done, what's blocked, what's next
-8. **Housekeeping** (during daily review) — Delete `done` tasks older than 7 days from work queues. Trim agent session logs to only the latest entry. Commit cleanup to git.
-9. **Heartbeat** — Poll every N minutes. Update own `last-heartbeat`.
+8. **Housekeeping** (during daily review) — Delete `done` tasks older than 7 days from task files (using `**Completed:**` timestamp). Trim agent session logs to only the latest entry. Commit cleanup to git.
+9. **Heartbeat** — Update `<!-- cortex:last-tick -->` in own task file.
 
 ## Housekeeping
 
 Notes grow over time as tasks complete and sessions accumulate. The coordinator prunes them during the daily review:
 
-- **Work queues** — Delete tasks with status `done` that are older than 7 days. Active tasks (`ready`, `in-progress`) are never deleted.
+- **Task files** — Delete tasks with status `done` whose `**Completed:**` timestamp is older than 7 days. Active tasks (`ready`, `in-progress`) are never deleted.
 - **Session logs** — Keep only the most recent entry in each agent note's `## Session Log`. Older entries are removed.
 - **Git** — The team directory should be a git repo. Pruned content is preserved in git history. After cleanup, commit: `git add -A && git commit -m "chore: prune completed tasks and old session logs"`
 
@@ -212,7 +237,6 @@ name: ""
 project: ""
 status: active
 joined: ""
-last-heartbeat: ""
 ---
 ```
 
@@ -242,8 +266,6 @@ status: active
 ## Next Action
 
 ## Notes
-
-## Work Queue
 ```
 
 ## Implementing Cortex
@@ -253,7 +275,7 @@ To make an agent runtime work with Cortex:
 1. **Read the config** — Know where the team directory is
 2. **Read the agent note** — Know the agent's role, projects, and capabilities
 3. **Generate a protocol file** — A file in the agent's project that tells it how to operate (e.g., `.cortex.md` for Claude Code, `.cursorrules` for Cursor)
-4. **Set up a heartbeat** — Periodic polling mechanism appropriate to the runtime
-5. **Follow the work queue contract** — Read `ready` tasks, mark `in-progress`, do work, mark `done`
+4. **Set up a heartbeat** — Periodic polling mechanism that updates `<!-- cortex:last-tick -->` in the agent's task file
+5. **Follow the task file contract** — Read `agents/<slug>/tasks.md`, pick up `ready` tasks in document order, mark `in-progress` with `**Started:**`, do work, mark `done` with `**Completed:**` and `### Summary`
 
 See `docs/adapters/` for runtime-specific examples.
