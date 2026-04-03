@@ -40,7 +40,6 @@ name: ""
 project: ""
 status: active
 joined: ""
-last-heartbeat: ""
 ---
 
 ## Role
@@ -71,8 +70,6 @@ status: active
 ## Next Action
 
 ## Notes
-
-## Work Queue
 ```
 
 ### 6. Ask for Telegram chat ID (optional)
@@ -119,9 +116,13 @@ telegram_chat_id: "<chat_id>"
 chief_of_staff_project: "<cos_project_dir>"
 ```
 
-### 10. Create chief of staff agent note
+### 10. Create chief of staff agent
 
-Write `<team_dir>/agents/chief-of-staff.md`:
+```bash
+mkdir -p <team_dir>/agents/chief-of-staff
+```
+
+Write `<team_dir>/agents/chief-of-staff/chief-of-staff.md`:
 
 ```
 ---
@@ -129,7 +130,6 @@ name: Chief of Staff
 project: <cos_project_dir>
 status: active
 joined: <today's date YYYY-MM-DD>
-last-heartbeat: ""
 ---
 
 ## Role
@@ -140,8 +140,8 @@ Coordinate the Cortex agent team — receive instructions from the user, dispatc
 
 ## Capabilities
 - Agent registration and onboarding via /register
-- Work dispatch — write tasks to project work queues
-- Agent monitoring — read session logs, detect staleness and blockers
+- Work dispatch — write tasks to agent task files
+- Agent monitoring — read task files for liveness and progress
 - Daily briefing (morning) and review (evening)
 - User communication via Telegram, terminal, or remote control
 
@@ -149,6 +149,8 @@ Coordinate the Cortex agent team — receive instructions from the user, dispatc
 Last session: --
 Status: registered
 ```
+
+Write `<team_dir>/agents/chief-of-staff/tasks.md` as an empty file.
 
 ### 11. Confirm
 
@@ -158,7 +160,7 @@ Respond:
 >
 > - Team directory: `<team_dir>`
 > - Config: `~/.cortex/config.yaml`
-> - Chief of staff registered at `agents/chief-of-staff.md`
+> - Chief of staff registered at `agents/chief-of-staff/chief-of-staff.md`
 >
 > **Next steps:**
 > 1. In the chief of staff's project (`<cos_project_dir>`), run `/join Chief of Staff`
