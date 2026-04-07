@@ -53,7 +53,7 @@ If CLAUDE.local.md contains a `## Cortex` section (the line `## Cortex` through 
 rm -f .claude/hooks/cortex-precheck.sh
 ```
 
-**5c.** Read `.claude/settings.json`. If it contains a hook entry with `"matcher": "Cortex tick:"` in the `hooks.UserPromptSubmit` array, remove that entry. Preserve all other hook entries. Write the updated JSON back.
+**5c.** Read `.claude/settings.json`. If it contains a hook entry in the `hooks.UserPromptSubmit` array whose `hooks` array includes `"command": ".claude/hooks/cortex-precheck.sh"`, remove that entry. Preserve all other hook entries. Write the updated JSON back.
 
 ### 6. Update agent note in team directory
 

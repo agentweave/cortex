@@ -141,6 +141,19 @@ Create the `.claude/hooks/` directory if it doesn't exist. Write the following s
 # Cortex idle suppression pre-check
 # Blocks Cortex tick prompts when no active tasks exist.
 # Installed by /cortex:join, removed by /cortex:leave.
+#
+# NOTE: matcher is ignored for UserPromptSubmit hooks, so this
+# script must filter by prompt content itself.
+
+# Read hook input and extract the prompt (requires jq).
+# If jq is missing, PROMPT is empty and the script defaults to allow.
+PROMPT=$(jq -r '.prompt // empty' 2>/dev/null)
+
+# Only apply to Cortex tick prompts — pass everything else through
+case "$PROMPT" in
+  "Cortex tick:"*) ;;
+  *) exit 0 ;;
+esac
 
 TASK_FILE="{team_dir}/agents/{slug}/tasks.md"
 
@@ -158,11 +171,10 @@ Make the script executable using Bash: `chmod +x .claude/hooks/cortex-precheck.s
 
 Read `.claude/settings.json` in the current project directory. If it doesn't exist, create it. If it exists, parse the existing JSON.
 
-If the `hooks.UserPromptSubmit` array does NOT already contain an entry with `"matcher": "Cortex tick:"`, add the following entry to the array:
+If the `hooks.UserPromptSubmit` array does NOT already contain an entry with `"command": ".claude/hooks/cortex-precheck.sh"`, add the following entry to the array:
 
 ```json
 {
-  "matcher": "Cortex tick:",
   "hooks": [
     {
       "type": "command",
